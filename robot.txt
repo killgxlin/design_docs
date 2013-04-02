@@ -1,0 +1,57 @@
+﻿需求：
+  Mode
+    chat move changemap 
+      random
+  Session
+    socket
+    buffer
+    onData(data){
+      buffer += data;
+      var msg = readMsg(buffer);
+      if(msg != null)
+        robot.onMsg(msg);
+    }
+  Robot 机器人
+    session
+    status
+    next_status
+    vector<Action> actions;
+  
+
+    logon 登录
+      session.connect("localhost:9876", function(){
+        CSMsg sclogon;
+        session.sendMsg(sclogon);
+      });
+    createRole 创建角色
+      CSMsg cscreaterole;
+      session.send(cscreaterole);
+    changeScene 切换地图
+      CSMsg cschange;
+      session.send(cschange);
+    moveTo 随机移动
+      CSMsg csmove;
+      session.send(csmove);
+    shout 喊话
+      CSMsg cschat;
+      session.send(cschat);
+    logout 登出
+      session.disconnect();
+  
+    init 初始化
+      this.on('timer', update);
+    update 更新
+      
+    onMsg(msg){
+      switch(msg.id) {
+        case SCLogon:
+          break;
+        case SCCreateRole:
+          break;
+        case SCEnterMap:
+          break;
+        case SCChat:
+          break;
+      }
+    }
+  
