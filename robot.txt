@@ -1,6 +1,7 @@
 ﻿需求：
   Mode
-    chat move changemap 
+    parallel action: chat move 
+    serial action: changemap 
       random
   Session
     socket
