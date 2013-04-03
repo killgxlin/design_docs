@@ -1,0 +1,93 @@
+宝物 treasure
+护送者 escort
+拦截者 interceptor
+发送者 sender
+月老 matcher
+护送 convoy
+
+server
+  struct tagTreasure
+    int32 treasure; // 宝物类型
+    uint64 sender; // 发送者
+    double remain_time; // 剩余倒计时
+    bool matcher; // 请了月老
+    vector<uint64> interceptor; // 拦截此宝物的玩家
+    vector<uint64> escort; // 邀请护送的伙伴
+  
+  struct tagTransportMgr
+    list<tagTreasure*> list; // 护送列表
+    list<tagPlayer*> subscribe_list; // 订阅列表
+  
+  struct tagPlayer
+    int32 send_count; // 发送次数		
+    int32 intercept_count; // 拦截次数
+    int32 escort_count; // 护送次数
+  
+client
+  UI
+    TreasureTips
+    MyTips
+    StartTransportUI
+
+  UIMediator
+    onOpen
+    onClose
+
+  Proxy
+    all transport i can see
+    deal transport update
+    handle SCOpenUI
+    handle SCCloseUI
+    send CSOpenUI
+    send CSCloseUI 
+
+  Entry
+    transport_client.xml
+      id
+      name
+    transport_proto.xml
+      id
+      time
+      reward
+
+message
+  action
+    CSOpenTransport
+    SCOpenTransport
+      transport_list
+    CSStartTransport
+      treasure_type
+    CSIntercept
+      playerid
+    SCIntercept
+      combat
+    CSDanceInSky
+      
+    CSInviteEscort
+      invitedplayer
+    SCInvitedEscort
+      inviterplayer
+    CSAnswerEscort
+      inviterplayer
+      accept
+    SCAnswerEscort
+      invitedplayer
+      accept
+
+  sync
+    SCTransportUpdate
+      playerid
+      time
+      intercepted_count
+      intercepted_by
+
+server model
+  Proto
+  TransportManager
+  handler
+  player  
+client model
+  entry
+  proxy
+  mediator
+  ui

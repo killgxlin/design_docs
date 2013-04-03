@@ -1,0 +1,18 @@
+coproduct:
+  example_code
+  design_doc
+
+product:
+  final_code
+  
+process:
+  design on design_doc
+    for each function
+      think
+      if not clear
+        write some code to example_code
+      write on design_doc
+  
+  code them down
+    
+  test

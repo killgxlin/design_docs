@@ -1,26 +1,33 @@
 ﻿需求：
-  Mode
-    parallel action: chat move 
-    serial action: changemap 
-      random
+  desc
+    set num
+    set logon interval
+    commit
+  
   Session
     socket
     buffer
+    Session
+      this.prototype = new EventEmitter;
+      socket = new Socket;
+      socket.on('data', onData);
     onData(data){
       buffer += data;
       var msg = readMsg(buffer);
-      if(msg != null)
-        robot.onMsg(msg);
+      if(msg == null) {
+        buffer = "";
+        return;
+      }
+      this.emit('msg', msg);
     }
+
   Robot 机器人
     session
     status
-    next_status
-    vector<Action> actions;
 
     logon 登录
       session.connect("localhost:9876", function(){
-        CSMsg sclogon;
+        CSMsg cslogon;
         session.sendMsg(sclogon);
       });
     createRole 创建角色
@@ -37,25 +44,28 @@
       session.send(cschat);
     logout 登出
       session.disconnect();
-  
-    init 初始化
-      this.on('timer', update);
-    update 更新
+    Robot
+      this.session = new Session
+    handle_event
+      sccreaterole -> createrole
+      sclogon -> online
+      chat -> online
+      move -> online
+      changescene -> online
+      logoff -> offline
       
-    onMsg(msg){
-      switch(msg.id) {
-        case SCLogon:
-          break;
-        case SCCreateRole:
-          break;
-        case SCEnterMap:
-          break;
-        case SCChat:
-          break;
-      }
-    }
-  
+    do_state
+      switch(state)
+        case offline
+          logon
+        case createrole
+          createRole
+        case online
+          switch random
+            doShout
+            doMove
+            doChangeScene
+            doLogoff
 
-
-
-
+var robot = new Robot();
+robot.start();
