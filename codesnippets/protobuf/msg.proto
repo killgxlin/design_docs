@@ -1,0 +1,11 @@
+package msg;
+
+enum CSMsgID {
+  ID_CSLogin = 1;
+  ID_CSRequestInit = 2;
+}
+
+message CSMsg {
+  required CSMsgID id = 1;
+  required string content = 2;
+}

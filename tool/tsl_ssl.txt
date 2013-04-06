@@ -1,0 +1,10 @@
+1 create private key
+  openssl genrsa -out ryans-key.pem 1024
+2 obtain a certificate
+  2.1 create a "Certificate Signing Request"(CSR) file
+    openssl req -new -key ryans-key.pem -out ryans-csr.pem
+    2.1.1 create a self-signed certificate with CSR
+      openssl x509 -req -in ryans-csr.pem -signkey ryans-key.pem -out ryans-cert.pem
+    2.1.2 create .pfx or .p12
+      openssl pkcs12 -export -in agent5-cert.pem -inkey agent5-key.pem -certfile ca-cert.pem -out agent5.pfx
+
