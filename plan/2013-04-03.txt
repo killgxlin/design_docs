@@ -1,2 +1,0 @@
-write robot.txt
-write husong.txt
