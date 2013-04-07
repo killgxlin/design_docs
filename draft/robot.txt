@@ -49,9 +49,9 @@ Manager
   }
 
 Robot
-  session
+  netlayer
   function Robot(){
-    session = new Session;
+    netlayer = new Netlayer;
   }
   function nextAction(callback){
     switch(random(0,6)){
@@ -82,34 +82,34 @@ Robot
     }
   }
   function logon(){
-    session.connect('9876', 'localhost', function(){
+    netlayer.connect('9876', 'localhost', function(){
       CSMsg cslogon;
-      session.sendMsg(cslogon);
+      netlayer.sendMsg(cslogon);
     });
   }
   function logoff(){
-    session.disconnect();
+    netlayer.disconnect();
   }
   function createRole(){
     CSMsg cscreaterole;
-    session.sendMsg(cscreaterole);
+    netlayer.sendMsg(cscreaterole);
   }
   function changeScene(){
     CSMsg cschangescene;
-    session.sendMsg(cschangescene);
+    netlayer.sendMsg(cschangescene);
   }
   function chat(){
     CSMsg cschat;
-    session.sendMsg(cschat);
+    netlayer.sendMsg(cschat);
   }
   function move(){
     CSMsg csmove;
-    session.sendMsg(csmove);
+    netlayer.sendMsg(csmove);
   }
   
-Session
+Netlayer
   socket
-  function Session(){
+  function Netlayer(){
     socket = new Socket();
   }
   function connect(port, host, callback){
