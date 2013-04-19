@@ -25,7 +25,7 @@ set shiftwidth=4
 set sidescroll=10
 set softtabstop=4
 set tabstop=4
-set window=44
+set window=45
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -39,10 +39,11 @@ badd +57 draft\husong.txt
 badd +56 draft\robot.txt
 badd +2 plan\2013-04-03.txt
 badd +14 codesnippets\protobuf\protobuf.js
-badd +1 \design_docs\draft\server_elements.txt
+badd +37 \design_docs\draft\server_elements.txt
 badd +12 \design_docs\draft\client_elements.txt
+badd +1 draft\juxing.txt
 args experience\processing.txt
-edit \design_docs\draft\server_elements.txt
+edit draft\juxing.txt
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -52,8 +53,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 86 + 86) / 173)
-exe 'vert 2resize ' . ((&columns * 86 + 86) / 173)
+exe 'vert 1resize ' . ((&columns * 87 + 87) / 175)
+exe 'vert 2resize ' . ((&columns * 87 + 87) / 175)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -157,12 +158,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 37 - ((28 * winheight(0) + 21) / 43)
+let s:l = 84 - ((41 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-37
-normal! 012l
+84
+normal! 0
 wincmd w
 argglobal
 edit \design_docs\draft\server_elements.txt
@@ -268,15 +269,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 37 - ((28 * winheight(0) + 21) / 43)
+let s:l = 37 - ((29 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 37
 normal! 012l
 wincmd w
-exe 'vert 1resize ' . ((&columns * 86 + 86) / 173)
-exe 'vert 2resize ' . ((&columns * 86 + 86) / 173)
+exe 'vert 1resize ' . ((&columns * 87 + 87) / 175)
+exe 'vert 2resize ' . ((&columns * 87 + 87) / 175)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
