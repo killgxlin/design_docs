@@ -83,3 +83,24 @@ player
 
 
 电影导演    电视剧导演  广告导演    
+
+
+register account
+
+login
+
+load player
+
+create player
+
+select card
+
+select level
+
+combat commit
+    
+
+sell card
+
+
+
