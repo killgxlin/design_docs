@@ -1,0 +1,48 @@
+rpc
+    request&response
+    notify
+    message RequestResponse {
+        required uint32 serial = 1; 
+        optional string object = 2;
+    }
+    
+    message Notify {
+        optional string object = 1;
+    }
+
+    listener.listen(80, function(session_){
+        session_.onRequest(
+            function(request_, responseCb_){
+                switch(request_.req_id){
+                    case ID_CSLoadPlayer: 
+                        db.load(request_.playerid, function(data_){
+                            responseCb_(data_);
+                        });
+                        break;
+                }
+            }
+        );
+
+        session_.onNotify(
+            function(notify_){
+                switch(notify_.not_id){
+                    case ID_CSChat:
+                        break;
+                }
+            }
+        );
+    });
+
+
+    session.connect(80, function(error_){
+        session.request(
+            {req_id:ID_CSLoadPlayer, playerid:1234},
+            function(response_){
+                response_.avatar
+            }
+        );
+        
+        session.notify(
+            {not_id:ID_CSChat,msg:"haha"}
+        );
+    });

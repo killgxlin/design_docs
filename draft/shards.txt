@@ -1,0 +1,47 @@
+shard
+  grids
+  registerSensor(senserid, pos)
+    var senser = createSensor(senserid);
+    senser.grid = findGrid(pos);
+    senser.grid.add(senser);
+    
+  unregisterSensor(senserid)
+    var senser = findSenser(senserid);
+    senser.grid.remove(senser);
+    senser.grid = null;
+    deleteSenser(senser);
+
+  syncSensorPos(senserid, pos)
+    var senser = findSenser(senserid);
+    senser.grid.remove(senser);
+    senser.grid = findGrid(pos);
+    senser.grid.add(senser);
+    
+  emit(flickerPos, msg)
+    findGrids(flickerPos, radius).forEach(function(grid){
+      grid.forEach(function(sensor){
+        sensor.send(msg);
+      });
+    });
+
+center
+  shards
+  
+  assignShard(senserid)
+    var shard = findMinLoadShard(senserid);
+    return shard;
+
+  onLogon(playerid)
+    session.shard = center.assignShard(playerid);
+    session.shard.registerSensor(playerid, pos);
+
+  onLogoff(playerid, session)
+    session.shard.unregisterSensor(playerid);
+
+  onBoradcast(pos, msg)
+    shards.forEach(function(shard){
+      shard.emit(pos, msg);
+    });
+
+  onMoveEnd(playerid, session)
+    session.shard.syncSensorPos(playerid, session.pos);

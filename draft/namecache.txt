@@ -1,0 +1,31 @@
+消息
+    CSQueryName
+        uint64 playerid;
+
+客户端
+    NameCache
+        mapInfo;
+        mapQuery;
+
+        querySimpleInfo(playerid, callback)
+            if mapInfo[playerid]
+                return mapInfo[playerid]
+            else if(mapQuery[playerid])
+                mapQuery[playerid].push(callback);
+            else
+                mapQuery[playerid] = [];
+                mapQuery[playerid].push(callback);
+                sendMsg
+        onSimpleInfo(info)
+            mapInfo[info.playerid] = info;
+            mapQuery[info.playerid].foreach(function(callback){
+                callback(info);
+            });
+            mapQuery[info.playerid] = null;
+
+服务器
+
+
+    NameCache.querySimpleInfo(playerid, function(name){
+        nameLable.text = name;
+    });

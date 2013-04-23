@@ -1,0 +1,24 @@
+角色
+    所有技能
+    当前技能
+    当前等级
+    当前经验
+
+    存数据库
+    从数据库读取
+    初始化
+    升级
+
+消息
+    初始化
+    学习
+        用元宝
+    更新
+        经验
+        等级
+    
+原型
+    partner_skill_proto_mapping.xml
+        partner_id 伙伴id
+        exp_s 升级经验
+        skill_ids 许多技能id

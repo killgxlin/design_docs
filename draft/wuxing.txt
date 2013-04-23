@@ -1,0 +1,59 @@
+五行
+    个人五行
+        主角伙伴
+            金木水火土
+            最高10级
+            消耗五行灵珠
+
+        若与阵法五行相生
+            个人加buff，平时也带着
+            属性界面可以查看到效果
+
+    阵法五行
+        主角学会五行属性，开启相应阵法
+        
+        若克对方五行
+            全队加buff，战斗时加
+            
+    原型
+        wuxing_proto
+            id 五行
+            add_list 0,1,2,3,4,5,6,7,8,9  // 不同层的增益id
+            consume_list 0,1,2,4,5,6,7,8,9  // 升到不同层的消耗id
+            team_add // 队伍的增益id
+
+    数据
+        Role
+o           applyPlayerWuXingEffect(zhenfaWuXing, apply)
+o           角色的五行等级
+o           角色五行相生增加的buff
+
+        Player
+o           当前阵法五行
+o           update_zhenfa_wuxing()
+o               for_each_role
+o                   applyPlayerWuXingEffect(zhenfaWuXing, apply)
+o           add_role(role)
+o               role.applyPlayerWuXingEffect(zhenfaWuXing, apply)
+o           remove_role(role)
+o               role.applyPlayerWuXingEffect(zhenfaWuXing, apply)
+
+o       CombatUnit
+o           applyZhenFaWuXingEffect(opponentZhenFaWuXing, apply)
+o           
+o       CombatRole
+o           阵法五行相生增加的buff
+
+        PbRole
+            buff
+
+    消息
+        初始化
+            PbRoleDetailInfo
+                角色五行
+                五行相生效果
+            SCPlayerInitInfo
+                阵法五行
+        升级
+            是否用元宝
+
