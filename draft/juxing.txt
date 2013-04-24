@@ -1,57 +1,4 @@
-登录/login
-    读数据库
-    验证帐号
-    建立session
-    响应ok
-
-登出/logout
-    删除session
-    响应ok
-    
-玩家/player
-    创建玩家./create
-        创建
-        存数据库
-        响应ok
-    加载玩家./load
-        读取玩家
-        建立对象
-        响应ok
-        
-    配置玩家./config
-        设置玩家
-        存数据库
-        响应ok
-        
-    招募./recruit
-
-    培养./train
-
-    战斗消息./combat
-        读数据库
-        找到对方
-        干一仗
-        响应回放
-
-
-route_module
-
-db_module
-
-login_server
-    game_server_stubs
-    /login
-    /register
-
-game_server
-    login_server_stub
-    /load
-    /create
-    /config
-    /recruit
-    /train
-    /combat
-// ----------------------------------------------------------------------
+/ ----------------------------------------------------------------------
 player
     性别
     类型
@@ -86,21 +33,51 @@ player
 
 
 register account
+    if user exist
+        send accent exist
+    insert user
+    send ok
 
 login
+    if user not exist
+        send user not exist
+    send ok
 
 load player
+    load player data from db
+    if not exist
+        send need create player
+    else
+        send player data
 
 create player
+    save player to db
+    send ok
 
 select card
+    add card to player
+    save player to db
+    del item
 
-select level
+query level
+    generate level
+    send 
 
 combat commit
+    if cheat
+        send you're cheater
+        return
+    reward
+    send response
     
-
 sell card
+    del card
 
 
 
+
+response msg
+    add item
+    remove item
+    money change
+    result
