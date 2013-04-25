@@ -1,0 +1,18 @@
+如何变成专家
+    内存泄漏
+        全部工程用debug版编译
+            protobuf
+            libevent
+            couchbase
+
+
+如何用node写服务器
+    集群
+    消息处理
+        统一用post，双向传json
+    数据库
+        mongodb
+        用一个链接
+    session
+        存在数据库
+            性能问题
