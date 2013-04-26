@@ -14,6 +14,7 @@ nmap <S-Insert> "*P
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set autoindent
+set background=dark
 set backspace=indent,eol,start
 set expandtab
 set helplang=Ch
@@ -24,7 +25,7 @@ set shiftwidth=4
 set sidescroll=10
 set softtabstop=4
 set tabstop=4
-set window=45
+set window=55
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -43,8 +44,10 @@ badd +12 \design_docs\draft\client_elements.txt
 badd +35 draft\juxing.txt
 badd +6 draft\juxing_about.txt
 badd +1 ~\_vimrc
+badd +54 draft\wabao.txt
+badd +1 experience\mem_leak.txt
 args experience\processing.txt
-edit experience\processing.txt
+edit \design_docs\draft\server_elements.txt
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -153,12 +156,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 18 - ((17 * winheight(0) + 22) / 45)
+let s:l = 40 - ((39 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-18
-normal! 0
+40
+normal! 012l
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
