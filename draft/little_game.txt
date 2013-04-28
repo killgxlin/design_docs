@@ -1,5 +1,7 @@
 3d引擎 render
+  createCamera
   draw
+
 物理引擎 phy
 声音引擎 sound
 
@@ -7,8 +9,11 @@ object
   update
   draw
   addToWorld
-    phy.add(obj)
-    render.add(obj)
+    phy.add(this)
+    render.add(this)
+  removeFromWorld
+    phy.remove(this)
+    render.remove(this)
 
 main
   init
