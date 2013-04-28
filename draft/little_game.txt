@@ -1,0 +1,25 @@
+3d引擎 render
+  draw
+物理引擎 phy
+声音引擎 sound
+
+object
+  update
+  draw
+  addToWorld
+    phy.add(obj)
+    render.add(obj)
+
+main
+  init
+  new object.addToWorld()
+  loop
+    for each object
+      object.update
+    phy.tick
+    sound.tick
+    for each object
+      object.draw
+    render.draw
+
+  destroy 
