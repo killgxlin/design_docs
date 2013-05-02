@@ -1,0 +1,46 @@
+宝物 treasure
+护送者 escort
+拦截者 interceptor
+发送者 sender
+月老 matcher
+护送 convoy
+
+服务器结构
+  struct tagTreasure
+    int32 treasure;                // 宝物类型
+    uint64 sender;                 // 发送者
+    double remain_time;            // 剩余倒计时
+    bool matcher;                  // 请了月老
+    vector<uint64> interceptor;    // 拦截此宝物的玩家
+    vector<uint64> escort;         // 邀请护送的伙伴
+  
+  
+  struct tagTreasureList
+    list<tagTreasure> list;        // 护送列表
+  
+  struct tagPlayer
+    int32 send_count;              // 发送次数
+    int32 intercept_count;         // 拦截次数
+    int32 escort_count;            // 护送次数
+  
+客户端界面
+  主界面
+    宝物tips
+    自己的数据界面
+    开始护送界面
+
+  Proxy 代理
+    我所能看到的运送
+    接收开始运送消息
+    接收运送结束消息
+    接收运送事件消息
+  
+消息
+  护送
+  招募
+  拦截
+  月伎飞天
+  
+  初始化
+  护送者更新
+
