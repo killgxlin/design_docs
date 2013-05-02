@@ -1,9 +1,27 @@
+界面 UI
+
 3d引擎 render
   createCamera
   draw
+  add
+  remove
+  init
+  destroy
 
 物理引擎 phy
+  add
+  remove
+  init
+  destroy
+
 声音引擎 sound
+  play
+  stop
+  pause
+  init
+  destroy
+
+资源加载 res
 
 object
   update
@@ -11,20 +29,41 @@ object
   addToWorld
     phy.add(this)
     render.add(this)
+    objectManager.add(this)
   removeFromWorld
     phy.remove(this)
     render.remove(this)
+    objectManager.remove(this)
+
+objectManager
+  add
+  remove
+  tick
+  init
+  destroy
 
 main
-  init
+  phy.init
+  sound.init
+  render.init
+  res.init
+  UI.init
+  objectManager.init
+
   new object.addToWorld()
+  render.addCamera
+
   loop
-    for each object
-      object.update
+    objectManager.tick
     phy.tick
     sound.tick
-    for each object
-      object.draw
-    render.draw
+    res.tick
+    UI.tick
+    render.tick
 
-  destroy 
+  objectManager.destroy
+  phy.destroy
+  UI.destroy
+  res.destroy
+  render.destroy
+  sound.destroy
