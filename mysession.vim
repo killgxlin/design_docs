@@ -25,7 +25,7 @@ set shiftwidth=4
 set sidescroll=10
 set softtabstop=4
 set tabstop=4
-set window=45
+set window=56
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -39,15 +39,17 @@ badd +57 draft\husong.txt
 badd +56 draft\robot.txt
 badd +2 plan\2013-04-03.txt
 badd +14 codesnippets\protobuf\protobuf.js
-badd +37 \design_docs\draft\server_elements.txt
+badd +74 \design_docs\draft\server_elements.txt
 badd +12 \design_docs\draft\client_elements.txt
 badd +35 draft\juxing.txt
 badd +6 draft\juxing_about.txt
 badd +1 ~\_vimrc
 badd +54 draft\wabao.txt
 badd +1 experience\mem_leak.txt
-args experience\processing.txt
-edit \design_docs\draft\server_elements.txt
+badd +1 experience\improve.txt
+badd +0 experience\solution.txt
+args experience\solution.txt
+edit experience\solution.txt
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -57,8 +59,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 88 + 87) / 175)
-exe 'vert 2resize ' . ((&columns * 86 + 87) / 175)
+exe 'vert 1resize ' . ((&columns * 117 + 117) / 235)
+exe 'vert 2resize ' . ((&columns * 117 + 117) / 235)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -162,12 +164,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 71 - ((32 * winheight(0) + 22) / 44)
+let s:l = 1 - ((0 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-71
-normal! 04l
+1
+normal! 0
 wincmd w
 argglobal
 edit \design_docs\draft\server_elements.txt
@@ -273,15 +275,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 39 - ((32 * winheight(0) + 22) / 44)
+let s:l = 90 - ((54 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-39
-normal! 016l
+90
+normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 88 + 87) / 175)
-exe 'vert 2resize ' . ((&columns * 86 + 87) / 175)
+exe 'vert 1resize ' . ((&columns * 117 + 117) / 235)
+exe 'vert 2resize ' . ((&columns * 117 + 117) / 235)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
