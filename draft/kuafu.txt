@@ -1,0 +1,24 @@
+服务器s1
+    名字：s1
+    服务器id:0x001
+    创建player的时候把serverid也填进去
+    读simpleplayerinfo的时候找到最大的playerid
+
+服务器s2
+    名字：s2
+    服务器id:0x002
+    创建player的时候把serverid也填进去
+    读simpleplayerinfo的时候找到最大的playerid
+
+登陆参数 服务器id 帐号名 密码
+    
+有帐号killgxlin密码123456
+登录第一服务器
+创建角色killerg
+登录第二服务器
+创建角色killerg
+登录第一服务器参加跨服活动显示名字为killerg.s1
+登录第二服务器参加跨服活动显示名字为killerg.s2
+第一服务器和第二服务器合并
+玩家登陆第一服务器角色为killerg.s1
+玩家登陆第二服务器角色为killerg.s2
