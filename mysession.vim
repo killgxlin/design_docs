@@ -25,7 +25,7 @@ set shiftwidth=4
 set sidescroll=10
 set softtabstop=4
 set tabstop=4
-set window=56
+set window=45
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -39,17 +39,19 @@ badd +57 draft\husong.txt
 badd +56 draft\robot.txt
 badd +2 plan\2013-04-03.txt
 badd +14 codesnippets\protobuf\protobuf.js
-badd +74 \design_docs\draft\server_elements.txt
-badd +12 \design_docs\draft\client_elements.txt
+badd +3 draft\server_elements.txt
+badd +12 draft\client_elements.txt
 badd +35 draft\juxing.txt
 badd +6 draft\juxing_about.txt
 badd +1 ~\_vimrc
 badd +54 draft\wabao.txt
 badd +1 experience\mem_leak.txt
 badd +1 experience\improve.txt
-badd +0 experience\solution.txt
+badd +1 experience\solution.txt
+badd +1 draft\resume.txt
+badd +0 draft\kuafu.txt
 args experience\solution.txt
-edit experience\solution.txt
+edit draft\kuafu.txt
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -59,8 +61,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 117 + 117) / 235)
-exe 'vert 2resize ' . ((&columns * 117 + 117) / 235)
+exe 'vert 1resize ' . ((&columns * 87 + 87) / 175)
+exe 'vert 2resize ' . ((&columns * 87 + 87) / 175)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -164,15 +166,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 27) / 55)
+let s:l = 1 - ((0 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
 normal! 0
+lcd E:\design_docs
 wincmd w
 argglobal
-edit \design_docs\draft\server_elements.txt
+edit E:\design_docs\draft\resume.txt
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -275,15 +278,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 90 - ((54 * winheight(0) + 27) / 55)
+let s:l = 106 - ((43 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-90
-normal! 0
+106
+normal! 020l
 wincmd w
-exe 'vert 1resize ' . ((&columns * 117 + 117) / 235)
-exe 'vert 2resize ' . ((&columns * 117 + 117) / 235)
+exe 'vert 1resize ' . ((&columns * 87 + 87) / 175)
+exe 'vert 2resize ' . ((&columns * 87 + 87) / 175)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

@@ -1,16 +1,23 @@
-服务器s1
-    名字：s1
-    服务器id:0x001
-    创建player的时候把serverid也填进去
+服务器
+    绑定组id:0x001
+    groupid:0x001
+    创建player的时候把groupid也填进去
+    playerid为本group中最大的playerid
     读simpleplayerinfo的时候找到最大的playerid
 
-服务器s2
-    名字：s2
-    服务器id:0x002
-    创建player的时候把serverid也填进去
+服务器
+    绑定组id:0x002,0x003
+    groupid:0x001
+    创建player的时候把groupid也填进去
+    playerid为本group中最大的playerid
     读simpleplayerinfo的时候找到最大的playerid
 
-登陆参数 服务器id 帐号名 密码
+玩家
+    帐号id
+    playerid
+    groupid
+
+web中服务器entry 服务器ip groupid 帐号id
     
 有帐号killgxlin密码123456
 登录第一服务器
@@ -22,3 +29,28 @@
 第一服务器和第二服务器合并
 玩家登陆第一服务器角色为killerg.s1
 玩家登陆第二服务器角色为killerg.s2
+
+玩家在网站登录
+选择服务器
+登录
+下载客户端
+客户端连接服务器
+服务器根据groupid和accountid找出player
+加载player
+否则创建player
+
+
+合服规则：
+1.如两个区有重命名玩家，则会在角色名之后加上原有服务器代号。
+玩家自身观察自己角色时，名字不变。
+
+2.如两个区有重名的帮派，规则同重名玩家。
+帮派成员观察本帮角色时，角色名不变
+ 
+3.跨服合并完成之后，参与跨服巅峰的服务器将采用同一个竞技场，
+同时玩家世界BOSS战、护送取经、帮派战等互动内容也将在同一时间内一同参与。
+
+4.小于20级且10天（包括10天）未登录的玩家角色会被删除(充值过的角色会保留)。
+充值玩家小提示：如果两个服都有角色，请先登录角色在充值，这样才可充值到你登陆的这个角色中。
+
+mongodb势在必行了
