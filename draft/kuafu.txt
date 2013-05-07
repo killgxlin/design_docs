@@ -1,23 +1,23 @@
 服务器
-    绑定组id:0x001
-    groupid:0x001
-    创建player的时候把groupid也填进去
-    playerid为本group中最大的playerid
-    读simpleplayerinfo的时候找到最大的playerid
+    deal_serverid:0x001
+    bind_serverid:0x001
+    创建player的时候把serverid也填进去
+    playerid为本server中最大的playerid
+    读所有相关server的simpleplayerinfo的时候找到最大的playerid
 
 服务器
-    绑定组id:0x002,0x003
-    groupid:0x001
-    创建player的时候把groupid也填进去
-    playerid为本group中最大的playerid
-    读simpleplayerinfo的时候找到最大的playerid
+    deal_serverid:0x002,0x003
+    bind_serverid:0x003
+    创建player的时候把serverid也填进去
+    playerid为本server中最大的playerid
+    读所有相关server的simpleplayerinfo的时候找到最大的playerid
 
 玩家
     帐号id
     playerid
-    groupid
+    serverid
 
-web中服务器entry 服务器ip groupid 帐号id
+web中服务器entry 服务器ip serverid 帐号id
     
 有帐号killgxlin密码123456
 登录第一服务器
@@ -35,7 +35,7 @@ web中服务器entry 服务器ip groupid 帐号id
 登录
 下载客户端
 客户端连接服务器
-服务器根据groupid和accountid找出player
+服务器根据serverid和accountid找出player
 加载player
 否则创建player
 

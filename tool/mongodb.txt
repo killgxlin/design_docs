@@ -1,0 +1,45 @@
+运行
+    下载压缩包
+    解压
+    在根目录创建data\db
+    运行mongod.exe
+
+基本命令
+    show dbs
+    use mydb
+    db.things.insert({name:"mongo"})
+    db.things.find()
+    show collections
+    show dbs
+    for(var i=0; i<20; ++i) db.things.insert({j:0, i:i})
+    db.things.find()
+    it
+    var c = db.things.find()
+    while(c.hasNext()) printjson(c.next())
+    db.things.find({i:3},{j:1})
+    db.things.find().limit(3)
+    db.things.findOne()
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    当对cursor使用[]操作符时，解释器会首先调用cursor.toArray()把所有的文档读入内存，cursor内的所有记录就都被遍历过了
+
+    每次插入新record时，mongodb会自动添加一个全局唯一的_id
+    如果执行write concern的操作，若_id重了，会报错
+    最大的bson文档是16mb
+    _id字段作为主键，在同一个collection中必须唯一，不能改变，而且可以是出了数组之外的任何类型
+    字段名字不能以$开头
+    字段名字不能包含.字符
+
+    db.collection.update(<query>,<update>,{upsert:true})
+    若存在匹配<query>的文档，则对其进行<update>，否则进行insert

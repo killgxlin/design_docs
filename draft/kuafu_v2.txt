@@ -1,0 +1,30 @@
+client: serverip, serverid, key
+    
+login
+    
+game
+
+db
+
+
+todo:
+    mongodb整合
+        链接
+        断开连接
+        创建collection
+        遍历collection
+        collection中插入记录
+        删除collection中记录
+        获取collection中记录
+
+    修改登录
+    修改对象存储部分
+    修改服务器加载
+        读取bind_serverid
+        读取deal_serverid
+        加载playermgr时得出maxplayerid
+    修改创建player部分
+    修改创guild部分
+
+
+
