@@ -1,0 +1,46 @@
+DBSaveRank1v1
+    g_db_mgr.save("arena", "{serverid:1, type:'1v1'}", function(err_){});
+
+TransStore
+    g_db_mgr.save("transport", "{severid:1, sender:1}", function(err_){});
+
+DBSaveGuild
+    g_db_mgr.save("guild", "{serverid:1, guildid:1}", function(err_){});
+
+DBRemoveGuild
+    g_db_mgr.remove("guild", "{serverid:1, guildid:1}", function(err_){});
+
+DBLoadPlayer
+    g_db_mgr.load("player", "{serverid:1, accountid:1}", "{}", function(err_){});
+
+DBSavePlayer
+DBCreatePlayer
+    g_db_mgr.save("player", "{serverid:1, accountid:1}", function(err_){});
+
+DBLoadRank1v1
+    g_db_mgr.load("arena", "{serverid:1, type:'1v1'}", "{}", function(err_){});
+
+TransGet
+    g_db_mgr.load("transport", "{serverid:1}", "{}", function(err_){});
+
+DBLoadAllGuilds
+    g_db_mgr.load("guild", "{serverid:1, guildid:1}", "{}", function(err_){});
+
+DBLoadSimplePlayers
+    g_db_mgr.load("player", "{serverid:1}", "{name:1, id:1, guildid:1}", function(err_){});
+
+
+
+collections
+    arena
+        sk:{serverid:1, type:1}
+
+    transport
+        sk:{serverid:1, senderid:1}
+
+    guild
+        sk:{serverid:1, guildid:1}
+
+    player
+        sk:{serverid:1, accountid:1}
+    

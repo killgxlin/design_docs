@@ -1,11 +1,3 @@
-client: serverip, serverid, key
-    
-login
-    
-game
-
-db
-
 
 todo:
     mongodb整合
@@ -18,6 +10,8 @@ todo:
         获取collection中记录
 
     修改登录
+        
+
     修改对象存储部分
     修改服务器加载
         读取bind_serverid
@@ -26,5 +20,69 @@ todo:
     修改创建player部分
     修改创guild部分
 
+
+DBMgr
+    bool connect(host, port, db);
+    void disconnect();
+
+    bool is_collection_exist(collection);
+    bool create_collection(collection);
+    void post(obj);
+    bool excute(obj);
+
+load_object
+    collection
+    query
+    projection
+    callback
+
+save_object
+    collection
+    object
+    callback
+
+remove_object
+    collection
+    query
+    callback
+
+server_start
+    load_simple_players
+        max_playerid = 0;
+        g_db_mgr.load("players", "{serverid:{$in:[1,2,3]}}", "{name:1, id:1}", [&](int error_, const char* docs_){
+            docs_.forEach([&](const char* doc_){
+                if(bind == doc.serverid)
+                    max_playerid = max(max_playerid, doc_.id);
+            });
+        });
+    load_guilds
+        g_db_mgr.load("guilds", "{serverid:{$in:[1,2,3]}}", "", function(guilds){
+        });
+    load_arena
+        g_db_mgr.load("arena", "{serverid:1}", "", function(arena){
+        });
+    load_transport
+        g_db_mgr.load("transport", "{serverid:1}", "", function(transports){
+        });
+
+server_shut
+server_update
+    player_login
+        g_db_mgr.load("players", "{serverid:1, accountid:1}", "", [=](int error_, const char* doc_){
+            
+        });
+    player_save
+    player_logoff
+    player_create
+        playerid = ++max_playerid;
+        g_db_mgr.save("players", "{serverid:1, accountid:1, playerid:playerid}", [=](int error_){
+        });
+    
+    transport_save
+    arena_save
+    guild_save
+    guild_remove
+        g_db_mgr.remove("guilds", "{serverid:1, accountid:1, guildid:1}", [=](int error_){
+        });
 
 
