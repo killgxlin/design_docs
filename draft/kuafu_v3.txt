@@ -43,4 +43,4 @@ collections
 
     player
         sk:{serverid:1, accountid:1}
-    
+   

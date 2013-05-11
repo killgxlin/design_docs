@@ -1,0 +1,29 @@
+#include <iostream>
+#include <functional>
+
+typedef std::function<bool (int32 error_)> Function;
+
+
+bool test_callback()
+{
+
+	vector<Function> funces;
+
+	Function fun = [](int32 error_)->bool{
+		printf("%d ok\n", error_);
+		return true;
+	};
+	for(int i=0; i<10; ++i)
+	{
+		funces.push_back(fun);
+	}
+
+	int index = 0;
+	std::for_each(funces.begin(), funces.end(), [&index](Function fun_){
+		fun_(index++);
+	});
+	
+
+	return true;
+}
+

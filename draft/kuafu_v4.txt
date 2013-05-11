@@ -1,0 +1,46 @@
+typedef std::function<bool (int32 error_)> Function;
+
+struct Op {
+	bool doit();
+};
+
+struct Load : public Op {
+	string collection;
+	string selector;
+	string project;
+	Function do_one;
+	Function do_end;
+};
+
+struct Save : public Op {
+	string collection;
+	string object;
+	Function do_end;
+};
+
+struct Remove : public Op {
+	string collection;
+	string selector;
+	Function do_end;
+};
+
+struct Mdb {
+	bool execute(Op &op);
+	bool post(Op &op);
+	bool update();
+	bool run();
+};
+
+Mdb g_mdb;
+
+void test() {
+	Load load;
+	load.collection = "player";
+	load.selector = "{serverid:1}";
+	load.project = "{protoid:1, name:1, map:1, level:1}";
+	load.do_one = [](){};
+	load.do_end = [](){};
+
+	g_mdb.execute(load);
+}
+
