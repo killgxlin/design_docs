@@ -1,0 +1,29 @@
+#include <functional>
+
+typedef std::function<void (const char* doc_)> FunctionS;
+typedef std::function<void (int32 error_)> FunctionN;
+typedef std::function<void (void)> FunctionV;
+
+struct View {
+	string view;
+	vector<string> key;
+	bool stale;
+
+	FunctionS result_cb;
+};
+
+void test() {
+	View v;
+	v.view = "_design/dev_new/_view/login";
+	v.key.push_back("123");
+	v.stale = false;
+	v.result_cb = [](const char* doc_){
+		doc_.key;
+	};
+
+	View v2;
+	v2.view = "_design/dev_new/_view/simpleplayerinfo";
+	v2.key.push_back("s1");
+	v2.key.push_back("s2");
+}
+

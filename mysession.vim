@@ -52,9 +52,9 @@ badd +1 experience\solution.txt
 badd +1 draft\resume.txt
 badd +1 draft\kuafu.txt
 badd +68 draft\kuafu_v2.txt
-badd +39 draft\kuafu_v3.txt
+badd +46 draft\kuafu_v3.txt
 args experience\solution.txt
-edit draft\kuafu_v3.txt
+edit draft\husong.txt
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -163,12 +163,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 46 - ((45 * winheight(0) + 31) / 62)
+let s:l = 65 - ((56 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-46
-normal! 03l
+65
+normal! 0
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
