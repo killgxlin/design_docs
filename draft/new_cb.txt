@@ -1,0 +1,87 @@
+struct Op {
+    virtual ~Op(){}
+
+    virtual void post();
+    void set_err(uint32 err_);
+};
+
+struct CreateView : public Op {
+    void post();
+    void callback();
+};
+
+struct PutDoc : public Op {
+    void post();
+    void callback(); 
+
+    string view;
+};
+
+struct Get : public Op {
+    void post();
+    void callback(); 
+
+    vector<string> keys;
+    vector<string> values;
+};
+
+struct Set : public Op {
+    void post();
+    void callback();
+
+    string key;
+    string value;
+};
+
+struct Del : public Op {
+    void post();
+    void callback();
+
+    string key;
+};
+
+
+bool test_db() {
+    for(int j=0; j<3; ++j){
+        for(int i=0; i<100; ++i){
+            Json::value save;
+            save["type"] = "guild";
+            save["serverid"] = j;
+            save["id"] = i;
+            string key = (string("guild:") + j + ":" + "i");
+            g_db_mgr.execute(new Set(key, save));
+        }
+    }
+
+    g_db_mgr.execute(new PutDoc("/view/guilds"));
+
+    vector<string> keys;
+
+    auto gv = new GetView("/view/guilds");
+    gv->callback = [&keys](const Json::value &save_){
+        auto gs = new Get;
+        int num = save_["total_rows"].asInt();
+        for(int i=0; i<num; ++i){
+            const Json::value &row = save_["rows"].get(i, INVALID);
+            gs.add_key(row["id"].asString());
+        }
+        gs->callback = [](const Json::value &save_){
+            printf("%s\n", save_.asString());
+            keys.push_back(save_["type"].asString() + ":" + save_["serverid"].asString() + ":" + save_["id"].asString());
+        };
+        g_db_mgr.execute(gs);
+    };
+    g_db_mgr.execute(gv);
+
+    for(auto itr=keys.begin(); itr!=keys.end(); ++itr){
+        auto del = new Del;
+        del->key = *itr;
+        g_db_mgr.execute(del);
+    }
+
+    gv = new GetView("/view/guilds");
+    gv->callback = [](const Json::value &save_){
+        assert(save_["total_rows"].asInt() == 0);
+    };
+    g_db_mgr.execute(gv);
+}
