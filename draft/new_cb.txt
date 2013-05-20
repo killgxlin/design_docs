@@ -5,7 +5,7 @@ struct Op {
     void set_err(uint32 err_);
 };
 
-struct CreateView : public Op {
+struct View : public Op {
     void post();
     void callback();
 };

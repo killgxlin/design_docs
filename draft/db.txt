@@ -1,0 +1,69 @@
+如何写一个比较大的系统
+    列出所有需求
+        实现合服
+    列出实现的优先级
+    简单的设计整个系统
+        各个记录的id以serverid type id组成
+        大部分view以serverid作为key
+        login以serverid和accountid组合作为key
+    根据优先级先弄出最简单的模型，保证可用
+        配置文件中添加serverid和serverid_set
+        在每个对象中添加三个id
+        游戏中用到的id为三合一id
+        加入loginview，以serverid:accountid作为key
+        加入guildview，以serverid作为key，load时传输serverid_set
+        加入simpleplayerview，以serverid作为key，load时传输serverid_set
+        在加载时通过各个view读取每个服务器上的最大可用id
+        原来的id保存为，type:serverid:id
+        登陆修改
+            登陆消息里面加入accountid和验证码
+            检查验证码是否有效
+            凭accountid和serverid从数据库中读出playerid
+            读取player
+        创建修改
+            加入三大id，本身的id改成type:serverid:id的形式
+        加载
+            根据当前serverid和加载的id评估出最大id
+
+        
+    根据优先级扩展这个简单的模型，保证可用
+    扩展不下去的时候重写
+    
+  g_db_mgr.post(new DBLoadPlayer(playerid_));
+  g_db_mgr.post(new DBSavePlayer(player()));
+  g_db_mgr.execute(new DBLoadEntirePlayer());
+  g_db_mgr.post(new DBCreatePlayer(create_player.name().c_str(), create_player.proto_id(), _playerid));
+
+  g_db_mgr.post(new DBRemoveGuild(id_));
+  g_db_mgr.post(new DBSaveGuild(this));
+  g_db_mgr.execute(new DBLoadAllGuild);
+  g_db_mgr.execute(new DBGetGuilds(g_guild_mgr.guildids));
+
+  g_db_mgr.post(new DBSaveRank1v1(_rank_list1v1));
+  g_db_mgr.execute(new DBLoadRank1v1());
+
+  g_db_mgr.execute(new TransGet());
+  g_db_mgr.post(new TransStore(save));
+
+服务器中使用的id前缀也要考虑，不同serverid相同id的对象会替
+保存serverid type
+创建时指定当前serverid
+加载时读取本身serverid
+删除时处理id
+
+
+inline uint64 calc_guid(uint32 serverid_, uint32 id_) {
+	return serverid_* 1000000 + id_;
+}
+
+inline void calc_key(const char* type_, uint32 serverid_, uint32 id_, string& key_) {
+	stringstream stm;
+	stm<<type_<<":"<<serverid_<<":"<<id_;
+	key_ = stm.str();
+}
+
+inline void calc_key(const char* type_, uint32 serverid_, string& key_) {
+	stringstream stm;
+	stm<<type_<<":"<<serverid_<<":"<<id_;
+	key_ = stm.str();
+}

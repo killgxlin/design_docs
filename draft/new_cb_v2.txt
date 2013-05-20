@@ -1,0 +1,203 @@
+struct Op {
+    virtual ~Op(){}
+
+    virtual void post(lcb_t conn_);
+    virtual bool deal_result(lcb_error_t err_, void* response_);
+    virtual cb();
+};
+
+extern CB g_mgr;
+
+struct View : public Op {
+    typedef function<void (View*, lcb_error_t, const Json::Value &)> Func;
+
+    Json::Value _resp;
+
+    void post(lcb_t conn_) {
+        lcb_http_request_t req;
+        lcb_http_cmd_t cmd(path.c_str(), path.length(), NULL, 0, LCB_HTTP_METHOD_GET, 0, "application/json");
+        lcb_make_http_request(conn_, this, LCB_HTTP_TYPE_VIEW, &cmd, &req);    
+    }
+    bool deal_result(lcb_error_t err_, void* response_) {
+        auto resp_ = (const lcb_http_resp_t*) response_;
+        Json::Reader reader;
+        string value((const char*)resp_->v.v0.bytes, resp_->v.v0.nbytes);
+        reader.parse(value, _resp);
+        return true;
+    }
+    void cb() {
+        if (callback) {
+            callback(this, error, resp);
+        }
+    }
+
+    string path;
+    Func callback;
+};
+
+struct Get : public Op {
+    typedef function<void (Get*, lcb_error_t, const vector<Json::Value> &)> Func;
+    
+    ~Get() {
+        if (VALID(_arrpCmds)) {
+            for(int i=0; i<keys.size(); ++i)
+                free(_arrpCmds[i]);
+            free(_arrpCmds);            
+        }
+    }
+
+    lcb_get_cmd_t** _arrpCmds;
+
+    vector<Json::Value> _resps;
+    void post(lcb_t conn_) {
+        _arrpCmds = (lcb_get_cmd_t**)malloc(sizeof(lcb_get_cmd_t*) * keys.size());
+        for (int i=0; i<keys.size(); ++i) {
+            _arrpCmds[i] = (lcb_get_cmd_t*)malloc(sizeof(lcb_get_cmd_t));
+            _arrpCmds[i]->version = 0;
+            _arrpCmds[i]->v.v0.key = keys[i].c_str();
+            _arrpCmds[i]->v.v0.nkey = keys[i].length();
+            _arrpCmds[i]->v.v0.exptime = 60;
+            _arrpCmds[i]->v.v0.nhashkey = 0;
+            _arrpCmds[i]->v.v0.hashkey = 0;
+        }
+        lcb_get(instance_, this, keys.size(), _arrpCmds);
+    }
+    bool deal_result(lcb_error_t err_, void* response_) {
+        auto resp_ = (const lcb_get_resp_t*)response_;
+        _resps.push_back(Json::Value());
+        g_mgr.str_to_json(resp_, *_resps.back())
+        return _resps.size() == key.size();
+    }
+    void cb() {
+        if (callback)
+            callback(this, error, resps);
+    }
+
+    vector<string> key;
+    Func callback;
+};
+
+void get_cb(lcb_error_t err_, void* cookie_, void* data) {
+    auto op = (Op*)cookie_;
+    if (op->deal_result(err, data)) {
+        g_mgr.result(op);
+    }
+}
+
+class CB {
+    public:
+        bool init(const char* host_, const char* user_, const char* passwd_, const char* bucket_) {
+            _asyn_conn = _create_conn(host_, user_, passwd_, bucket_);
+            start();
+
+            return true;
+        }
+        void destroy() {
+            set_term();
+            join();
+            _delete_conn(_asyn_conn);
+        }
+        void update() {
+            _result_lock.lock();
+            while (!_result_queue.empty()) {
+                auto op = _result_queue.front();
+                _result_queue.pop_front();
+
+                op->deal_result();
+            }
+            _result_lock.unlock();
+        }
+
+        void result(Op* op_) {
+            _result_lock.lock();
+            _result_queue.push_back(op_);
+            _result_lock.unlock();
+        }
+        bool post(Op* op_) {
+            _post_lock.lock();
+            _post_queue.push_back(op_);
+            _post_lock.unlock();
+        }
+        bool execute(Op* op_);
+
+        void json_to_str(const Json::Value &json_, string &str_);
+        void str_to_json(const string &str_, Json::Value &json_);
+
+        void run() {
+            while (!is_term()) {
+                _post_lock.lock();
+
+                while (!_post_queue.empty()) {
+                    auto op = _post_queue.front();
+                    _post_queue.pop_front();
+
+                    op->post(_asyn_conn);
+                }
+
+                _post_lock.unlock();
+                lcb_wait(_asyn_conn);
+            }
+        }
+
+    private:
+        Lock _post_lock;
+        list<Op*> _post_queue;
+        Lock _result_lock;
+        list<Op*> _result_queue;
+
+        lcb_t _asyn_conn;
+};
+
+CB g_mgr;
+
+bool test_db_sync() {
+    g_mgr.init("localhost", "killerg", "killerg", "default");
+
+    vector<string> keys;
+
+    auto v = new View;
+    v->path = "/path/to/guild?para1=value1&para2=value2";
+    v->callback = [&keys] (View* v_, lcb_error_t err_, const Json::Value &doc_) {
+        for (auto itr = doc_.begin(); itr != doc_.end(); ++itr) {
+            keys.push_back((*itr)["id"].asString());
+        }
+    };
+    g_mgr.execute(v);
+
+    auto g = new Get;
+    g->key = keys;
+    g->callback = [] (Get* g_, lcb_error_t err_, const Json::Value &doc_) {
+        printf("%s\n", g_mgr.json_to_str(doc_));
+    }
+    g_mgr.execute(g);
+
+    g_mgr.destroy();
+
+    return true;
+}
+
+bool test_db_async() {
+    g_mgr.init("localhost", "killerg", "killerg", "default");
+
+    while (true) {
+        auto v = new View;
+        v->path = "/path/to/guild?para1=value1&para2=value2";
+        v->callback = [] (View* v_, lcb_error_t err_, const Json::Value &doc_) {
+            auto g = new Get;
+            for (auto itr = doc_.begin(); itr != doc_.end(); ++itr) {
+                g->key.push_back((*itr)["id"].asString());
+            }
+            g->callback = [] (Get* g_, lcb_error_t err_, const Json::Value &doc_) {
+                printf("%s\n", g_mgr.json_to_str(doc_));
+            }
+            g_mgr.post(g);
+        };
+        g_mgr.post(v);
+
+        Sleep(1000);
+    }
+
+    g_mgr.destroy();
+
+    return true;
+}
