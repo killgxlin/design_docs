@@ -52,18 +52,42 @@
 删除时处理id
 
 
-inline uint64 calc_guid(uint32 serverid_, uint32 id_) {
-	return serverid_* 1000000 + id_;
-}
 
-inline void calc_key(const char* type_, uint32 serverid_, uint32 id_, string& key_) {
-	stringstream stm;
-	stm<<type_<<":"<<serverid_<<":"<<id_;
-	key_ = stm.str();
-}
+登陆时传accountid
+根据serverid:accountid读取角色
+角色不存在
+    serverid生成一个playerid
+    创建角色
+    读取角色
 
-inline void calc_key(const char* type_, uint32 serverid_, string& key_) {
-	stringstream stm;
-	stm<<type_<<":"<<serverid_<<":"<<id_;
-	key_ = stm.str();
-}
+
+//----------------------------------------------------------------------------------------------------------------------
+cfgmgr
+    serverid 2
+    append_serverid 0,1
+
+playermgr
+    next_playerid 2,001
+    map<playerid, player> players
+
+session
+    player
+    accountid 3
+
+player
+    session
+    playerid 2,000
+
+handleCSLogin
+    player = playermgr.getplayer(accountid)
+    if (player == null) { 
+        db.loadplayer(loginview, serverid, accountid, [](key){
+            db.load(key, [](player_data){
+                playermgr.onload(player_data)
+            })
+        })
+    }
+    else
+        setplayer(player)
+    end
+DBLoadPlayer

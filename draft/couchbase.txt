@@ -20,10 +20,12 @@ void test() {
 	v.result_cb = [](const char* doc_){
 		doc_.key;
 	};
+    db.execute(v);
 
 	View v2;
 	v2.view = "_design/dev_new/_view/simpleplayerinfo";
 	v2.key.push_back("s1");
 	v2.key.push_back("s2");
+    db.execute(v2);
 }
 

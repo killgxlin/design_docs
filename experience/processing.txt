@@ -6,7 +6,7 @@ product:
   final_code
   
 process:
-
+  详尽的描述流程，整理需求
   design on design_doc
     for each function
       think main logic

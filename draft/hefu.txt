@@ -1,0 +1,109 @@
+名字
+	lname 名字.s1
+	sname 名字
+	sid 服务器id
+	id sid+id
+
+sid中的sname是否存在
+lname是否存在
+通过lname取得sid和sname
+通过id取得sid
+通过id取得lname
+通过sname和id取得lname
+通过sname和sid取得lname
+同sid的sname不重
+
+
+通过名字查询玩家信息
+创建角色时是否重名
+通过名字添加好友
+通过名字邀请入帮派
+通过名字查询帮派信息
+
+s1
+	player
+		linux
+		emacs
+	guild
+		gnu
+
+s2
+	player
+		vs
+		sqlsvr
+	guild
+		microsoft
+
+s3
+	player
+		linux
+		sqlsvr
+	guild
+		gnu
+
+s1 s2 s3合并为s3
+	emacs
+		看到linux 也看到了linux.s3
+		看到了在帮会gnu中
+		建立gnu.s3，邀请linux.s3
+		建立gnu.s3，邀请linux
+		
+		
+	s3上的sqlsvr
+		看到linux 也看到了linux.s1
+	s2上的sqlsvr
+		看到了vs 也看到了sqlsvr.s3
+
+
+实现
+    数据结构
+        map<id, sname>  id_sname;
+        map<sname, list<id>> sname_idlist;
+
+    初始化时收集名字
+        id_sname.insert(id, sname);
+        sname_idlist[sname].push_back(id);
+
+	玩家通过id向服务器请求name
+        sid = getsid(selfid);
+        if (id_sname.count(id)) {
+            auto idlist = sname_idlist.count(id_sname[id]);
+            if(idlist.size() >= 2 && getsid(id) != sid){
+                send lname
+            } else {
+                send sname
+            }
+        }
+        服务器发现此id对应的sname在本服务器同时在别的服务器上
+            那么服务器发对应的lname
+        否则
+            发送sname
+    
+    通过sname取得id
+        sid = getsid(selfid);
+        if (sname_idlist.count(sname)) {
+            for_each(sname_idlist[sname].begin(), sname_idlist[sname].end(), [](id){
+                getsid(id) == sid
+            });
+        }
+    通过lname取得id
+        sid = getsid(lname);
+        sname = getsname(lname);
+        if (sname_idlist.count(sname)) {
+            for_each(sname_idlist[sname].begin(), sname_idlist[sname].end(), [](id){
+                getsid(id) == sid
+            });
+        }
+
+实现v2
+    数据结构
+        map<sid, set<sname>> sid_snameset;
+
+    初始化
+        id sname
+        sid = getsid(id);
+        sid_snameset[sid].insert(sname);
+    同服务器是否重名
+        selfid sname
+        sid = getsid(selfid);
+        sid_snameset[sid].count(sname);
