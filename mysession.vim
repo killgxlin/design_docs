@@ -54,9 +54,10 @@ badd +1 draft\kuafu.txt
 badd +68 draft\kuafu_v2.txt
 badd +46 draft\kuafu_v3.txt
 badd +1 draft\pet.txt
-badd +1 draft\server_elements_v2.txt
+badd +15 draft\server_elements_v2.txt
+badd +0 draft\pet\net.txt
 args experience\solution.txt
-edit draft\server_elements_v2.txt
+edit draft\pet\net.txt
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -171,15 +172,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 15 - ((14 * winheight(0) + 25) / 50)
+let s:l = 24 - ((23 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-15
-normal! 0
+24
+normal! 010l
+lcd E:\design_docs
 wincmd w
 argglobal
-edit draft\pet.txt
+edit E:\design_docs\draft\pet.txt
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent

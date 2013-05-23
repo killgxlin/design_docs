@@ -1,6 +1,29 @@
 network
-    init(ip, port)
-    destroy()
-    conn = accept()
+    net.init(ip, port)
+
+    conn = net.accept()
+
     packet = conn.recv()
+    conn.return(packet)
+
+    packet = conn.get()
     conn.send(packet)
+
+    net.destroy()
+    
+db
+    Find find;
+    find.key = "lalala"
+    find.deal_one = function(data){
+        print(data)
+    }
+    db.execute(find)
+
+    Update update
+    update.key = "lalala"
+    update.
+    
+
+res
+    json
+    xml
