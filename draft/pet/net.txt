@@ -1,0 +1,6 @@
+network
+    init(ip, port)
+    destroy()
+    conn = accept()
+    packet = conn.recv()
+    conn.send(packet)
