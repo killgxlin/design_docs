@@ -1,0 +1,17 @@
+client
+
+center
+
+bill
+
+world
+
+
+
+
+client logon center
+client request worldlist from center
+client request connect to world
+center notify world
+client connect world
+client disconnect center
