@@ -43,29 +43,7 @@ db
 
     db.destroy()
     
+    
 res
     json
-        数组
-
     xml
-        范围索引
-        id索引
-
-        xml.init()
-        auto proto = xml.proto(id)
-        xml.destroy()
-
-datetime
-    auto now = timer.now()
-    auto expire = timer.date(2013,3,54,12,23)
-    auto interval = now - expire
-    if (interval.pos) {
-    } else {
-    }
-
-    auto cooldown = timer.interval(50)
-    cooldown -= timer.last_inter()
-    if (cooldown < 0) {
-    }
-
-
