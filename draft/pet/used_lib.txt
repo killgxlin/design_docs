@@ -1,0 +1,8 @@
+boost
+    shared_ptr 消息
+    date_time 时间
+mongodb
+protobuf
+jsoncpp
+tinyxml
+

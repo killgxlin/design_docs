@@ -5,17 +5,9 @@ login
 bill
 
 world
-:w
 
 
 
-
-client connect login
-client request worldlist from login
-client request connect to world
-login notify world
-client connect world
-client disconnect login
 
 client connect login
 login verify account and update status

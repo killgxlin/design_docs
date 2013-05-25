@@ -1,16 +1,72 @@
 network
-    net.init(ip, port)
+    connection
+        ClientConnection
+            on_connect
+            on_err
+            on_close
+            on_msg
+            
+        ServerConnection
+            on_connect
+            on_err
+            on_close
+            on_msg
 
-    conn = net.accept()
+    client
+        IO io
+        Connector connector(io)
+        Connection conn
 
-    packet = conn.recv()
-    conn.return(packet)
+        while (true) {
+            // some logic
 
-    packet = conn.get()
-    conn.send(packet)
+            // ...
+            if (need_connect) {
+                conn = connector.connect<ClientConnection>(ip, port)
+            }
+            // ...
 
-    net.destroy()
+            // if connected
+            if (conn.is_ready()) {
+                packet = conn.get()
+                conn.send(packet)
+
+                packet = conn.recv()
+                if (packet) {
+                    // deal packet
+                    // ...
+                    conn.return(packet)
+                }
+
+                if (need_disconnect) {
+                    conn.close()
+                }
+
+            }
+            
+            io.run_once()
+        }
+
+    server
+        IO io
+        Accepter accepter(io)
+        accepter.start(ip, port)
+        conn = accepter.accept()
+
+        conn.onclose= function() {}
+        conn.onerr = function() {}
+
+        packet = conn.recv()
+        conn.return(packet)
+
+        packet = conn.get()
+        conn.send(packet)
+
+        accepter.finish()
     
+        while (true) {
+            
+        }
 db
     db.init(ip, port)
 
@@ -43,7 +99,29 @@ db
 
     db.destroy()
     
-    
 res
     json
+        数组
+
     xml
+        范围索引
+        id索引
+
+        xml.init()
+        auto proto = xml.proto(id)
+        xml.destroy()
+
+datetime
+    auto now = timer.now()
+    auto expire = timer.date(2013,3,54,12,23)
+    auto interval = now - expire
+    if (interval.pos) {
+    } else {
+    }
+
+    auto cooldown = timer.interval(50)
+    cooldown -= timer.last_inter()
+    if (cooldown < 0) {
+    }
+
+
