@@ -26,7 +26,7 @@ set shiftwidth=4
 set sidescroll=10
 set softtabstop=4
 set tabstop=4
-set window=63
+set window=51
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -57,7 +57,7 @@ badd +15 draft\server_elements_v2.txt
 badd +1 draft\pet\deploy.txt
 badd +18 draft\pet\milestone_server.txt
 badd +1 draft\pet\milestone.txt
-badd +71 draft\pet\engine.txt
+badd +1 draft\pet\engine.txt
 badd +3 draft\pet\used_lib.txt
 args experience\solution.txt
 edit draft\pet\engine.txt
@@ -70,8 +70,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 135 + 134) / 268)
-exe 'vert 2resize ' . ((&columns * 132 + 134) / 268)
+exe 'vert 1resize ' . ((&columns * 100 + 100) / 200)
+exe 'vert 2resize ' . ((&columns * 99 + 100) / 200)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -175,7 +175,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 18 - ((4 * winheight(0) + 31) / 62)
+let s:l = 18 - ((3 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -184,7 +184,7 @@ normal! 08l
 lcd E:\design_docs
 wincmd w
 argglobal
-edit E:\design_docs\draft\pet\used_lib.txt
+edit E:\design_docs\draft\pet\engine.txt
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -287,16 +287,17 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 3 - ((2 * winheight(0) + 31) / 62)
+let s:l = 127 - ((49 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-3
+127
 normal! 0
 lcd E:\design_docs
 wincmd w
-exe 'vert 1resize ' . ((&columns * 135 + 134) / 268)
-exe 'vert 2resize ' . ((&columns * 132 + 134) / 268)
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 100 + 100) / 200)
+exe 'vert 2resize ' . ((&columns * 99 + 100) / 200)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

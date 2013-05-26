@@ -1,0 +1,18 @@
+
+io_service svc;
+
+acceptor actp(svc);
+actp.bind(endpoint);
+actp.listen();
+socket sock(svc);
+actp.async_accept(sock,  [&svc, &sock](){
+
+    async_read(sock, read_at_least(4), [](){
+    });
+
+});
+thread thr([](){
+    svc.run();
+});
+
+
