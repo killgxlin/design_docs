@@ -1,0 +1,59 @@
+#include <boost/shared_ptr.hpp>
+#include <list>
+#include <map>
+
+typedef char int8;
+typedef short int16;
+typedef long int32;
+
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned long uint32;
+
+using namespace std;
+
+typedef boost::shared_ptr<vector<uint8>> msg_t;
+
+struct Connection {
+    void send(msg_t msg_);
+    void give(msg_t msg_);
+    msg recv();
+    msg get();
+
+    void handle_write();
+    void handle_read();
+    void post_send();
+
+    list<msg_t>   send_queue;
+    list<msg_t>   recv_queue;
+};
+
+struct ServerSession : public Connection{
+    void update();
+};
+struct SessionMgr {
+	void listen(const char* ip_, uint16 port_);
+	void start_accept();
+    void cancel_accept();
+
+    void handel_accept();
+
+	Connection* accepting;
+	list<Connection*> checking_list;
+	map<uint32, Connection*> online_map;
+} gsm;
+
+int test_asio2(void)
+{
+	gsm.listen("localhost", 9876);
+
+	gsm.start_accept();
+    while (true) {
+        gsm.
+    }
+    gsm.cancel_accept();
+
+	return 0;
+}
+
+
