@@ -1,0 +1,35 @@
+先决条件
+
+    couchbase
+        ip地址
+        用户名
+        密码
+        bucket
+
+    服务器
+        ip
+        port
+        运营商id
+        服务器id
+
+
+开始部署
+    
+    按照先决条件中的参数填game_ku/server/cfg/deploy.json配置文件
+    
+    修改game_ku/client/index.html
+        控件host的value改写成服务器的ip
+        控件server的value改写成s+服务器id 例如:s0
+
+    依次运行
+        game_ku/client/http_server.exe
+        game_ku/server/xmlsocket.exe
+        game_ku/server/project_x.exe
+
+
+开启游戏
+
+    打开浏览器
+    地址栏中输入http://ip地址:8889
+    开启页面之后在表单中输入要登陆的服务器ip 服务器名和uid，点击submit即可登陆
+

@@ -1,29 +1,47 @@
+预备
+2   环境
+        ubuntu
+        apt
+        git
+        vim
+        gnu tool chain
+            gcc
+            gdb
+
 第一阶段
+    游戏系统纵览
+
     底层库
-        数据库架构
-        网络通信架构
+        日志
+3       数据库架构
+            多线程
+            清理工作
+3       网络通信架构
             服务器
             客户端
-        游戏内容配置
+2       游戏内容配置
             动态加载
             xml
                 id作为key
             json
-        控制台
+                配置文件
+2       控制台
+            游戏内控制台
+
     架构
-        message
+2       message
             req-res
             notify
-        world
+2       world
             分线
-            
-        机器人
+4       机器人
+
     游戏内容
-        战斗系统
+2       战斗系统
             buff
             skill
             process
-        游戏对象同步机制
+4       游戏对象同步机制
             数据库
                 局部更新
             网络

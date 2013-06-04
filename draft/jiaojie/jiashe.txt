@@ -1,0 +1,40 @@
+游戏主程序
+game_ku/bin/project_x.exe
+
+flash验证服务器
+game_ku/bin/xmlsocket.exe
+
+各种运行库
+game_ku/bin/*.dll
+
+游戏属性文件
+game_ku/server/xml/*.xml
+
+游戏部署配置
+game_ku/server/cfg/deploy.json
+
+    couchbase.ip couchbase数据库ip
+    couchbase.user couchbase数据库user
+    couchbase.passwd couchbase数据库密码
+    couchbase.bucket couchbase库名称
+
+    server.ip 服务器绑定ip
+    server.port 服务器绑定port
+    server.console_port 控制台端口
+    server.maxfps 最大帧数
+    server.pid 运营商编号
+    server.serverid 服务器id
+    server.append_serverid 联合启动的服务器id
+    server.login_timeout 登陆超时单位秒
+
+
+游戏内容配置
+game_ku/server/cfg/game.json
+
+    default_map 默认地图id
+    levelup_pu_attack_add 升级默认加的普通攻击力
+    levelup_jue_attack_add 升级默认加的绝技攻击力
+    levelup_hp_add 升级默认加的血
+
+
+

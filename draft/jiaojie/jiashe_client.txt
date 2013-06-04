@@ -1,0 +1,12 @@
+主页面
+game_ku/client/index.html
+
+游戏页面
+game_ku/client/game.html
+
+游戏主文件
+game_ku/client/main.swf
+
+http服务器
+game_ku/client/http_server.exe
+

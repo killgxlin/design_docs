@@ -1,0 +1,13 @@
+开发环境架设
+
+    安装couchbase服务器
+        可能遇到的问题
+            ip装好之后的ip设置问题
+
+    vs2010
+        需要依赖的库
+            都在chengxu_ku/cpp/win/deps下面
+        输出路径和工作路径
+            game_ku/server/bin
+
+    

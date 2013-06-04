@@ -1,0 +1,36 @@
+chengxu_ku
+    as3 客户端相关工程
+         
+    cpp 服务器相关工程
+        src 源代码
+        win windows平台相关内容
+            deps 依赖的库
+            proj 工程文件
+            temp obj临时文件
+         
+    go go实现的机器人
+         
+    js js实现的机器人
+         
+    msg protobuf消息
+        as_plugin as用到的插件
+        msg_as 生成的as工程文件存放路径
+        msg_cpp 生成的cpp工程文件存放路径
+        msg_go 生成的go工程文件存放路径
+        pb 原型文件存放路径
+            all.proto 包含了所有的proto文件
+            enum.proto 各种枚举的定义
+            msg.proto 各种消息的定义
+            object.proto 各种结构的定义
+            protoc.exe protobuf用到的编译器
+
+        clean.bat 删除生成的工程文件
+        cmd.bat 当前路径打开控制台
+        copy_msg.bat 复制生成好的工程文件到项目中去
+        gen_msg.bat 生成工程文件
+
+    xmlmapping xml映射表文件
+        client 客户端用到的映射表
+        server 服务器用到的映射表
+
+    copy_xml_mapping.bat 把xmlmapping下的文件复制到策划映射文件夹中去
