@@ -1,0 +1,11 @@
+struct RankList {
+    uint64 players[100];
+};
+
+struct Player {
+    uint64 challenged[5];
+};
+
+void handle_pk() {
+    
+}

@@ -60,9 +60,10 @@ badd +1 draft\pet\milestone.txt
 badd +18 draft\pet\engine.txt
 badd +3 draft\pet\used_lib.txt
 badd +55 draft\pet\session.txt
-badd +0 draft\pet\client_session.txt
+badd +20 draft\pet\client_session.txt
+badd +0 draft\pet\db.txt
 args draft\pet\client_session.txt
-edit draft\pet\client_session.txt
+edit draft\pet\db.txt
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -72,8 +73,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 101 + 100) / 200)
-exe 'vert 2resize ' . ((&columns * 98 + 100) / 200)
+exe 'vert 1resize ' . ((&columns * 100 + 100) / 200)
+exe 'vert 2resize ' . ((&columns * 99 + 100) / 200)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -177,12 +178,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 20 - ((19 * winheight(0) + 25) / 50)
+let s:l = 10 - ((9 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-20
-normal! 034l
+10
+normal! 03l
 lcd E:\design_docs
 wincmd w
 argglobal
@@ -289,7 +290,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 32 - ((19 * winheight(0) + 25) / 50)
+let s:l = 32 - ((20 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -297,8 +298,8 @@ normal! zt
 normal! 017l
 lcd E:\design_docs
 wincmd w
-exe 'vert 1resize ' . ((&columns * 101 + 100) / 200)
-exe 'vert 2resize ' . ((&columns * 98 + 100) / 200)
+exe 'vert 1resize ' . ((&columns * 100 + 100) / 200)
+exe 'vert 2resize ' . ((&columns * 99 + 100) / 200)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
