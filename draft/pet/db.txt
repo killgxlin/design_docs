@@ -1,11 +1,137 @@
-struct RankList {
+struct db_t {
+    list<op_t*>* cur_pack;
+    list<list<op_t*>*> queued_packs;
+    list<list<op_t*>*> operated_packs;
+
+    list<op_t*> queued_ops;
+    list<op_t*> operated_ops;
+
+    bool execute(op_t*);
+    void post_trans(op_t*);
+    void post(op_t*);
+
+    static void thread_trans();
+    static void thread_ops();
+
+    connection_t sync_conn;
+    connection_t ops_conn;
+    connection_t pack_conn;
+} gdb;
+
+struct ranklist_t {
     uint64 players[100];
+} grl;
+
+struct item_t {
+    uint32 protoid;
+    int32 num;
 };
 
-struct Player {
-    uint64 challenged[5];
+struct container_t {
+    item_t shelf[10];
 };
 
-void handle_pk() {
+struct player_t {
+    uint64 tochallenge[5];
+    bool challenged[5];
+    uint64 playerid;
+    container_t conts[3];
+
+    void save(bob &save_) {
+        save_.append("playerid", playerid);
+
+        for (int i=0; i<5; ++i)
+            bab.appendArray("tochallenge", tochallenge[i]);
+
+        BSONArrayBuilder b;
+        for (int i=0; i<5; ++i)
+            b.append(challenged[i]);
+        bab.append("challenged", b.arr());
+
+        for (int i=0; i<3; ++i) {
+            BSONArrayBuilder b;
+            for (int j=0; j<10; ++j) {
+                bo item = BSON(
+                    "proto"<<conts[i].shelf[j].protoid<<
+                    "num"<<conts[i].shelf[j].num
+                );
+                b.append(item);
+            }
+            bab.appendArray("container", b.arr());
+        }
+    }
+};
+
+void handle_pk(me, msg) {
+    int he = me.tochallenge[msg.index];
+
+    int my_index = grl.getIndex(me);
+    int his_index = grl.getIndex(he);
     
+    swap(grl.players[my_index], grl.players[his_index]);
+    me.challenged[msg.index] = true;
+
+    store_t store;
+    store.collection = "rank_list";
+    store.query = QUERY("sid"<<1);
+    store.update = BSON(
+        "$set"<<BSON(
+            v_name("players.%d", 1)<<100<<
+            v_name("players.%d", 3)<<1
+        )
+    );
+    gdb.post_trans(store);
+    
+    store_t store2;
+    store2.collection = "player";
+    store2.query = QUERY("sid"<<1<<"playerid"<<100);
+    store2.update = BSON("$set"<<BSON(v_name("challenged.%d", 1)<<"true"));
+    gdb.post_trans(store2);
+
+    load_t load;
+    load.collection = "player";
+    load.query = QUERY("sid"<<1);
+    load.cb = [](){
+    };
+    gdb.execute(load);
+}
+
+void handle_create(me, msg) {
+    player_t player;
+    bob save;
+    player.save(save);
+
+    store_t store3;
+    store3.query = QUERY("sid"<<1<<"playerid"<<100);
+    store3.update = save.obj();
+    store3.cb = [](){
+        load_t load;
+        load.collection = "player";
+        load.query = QUERY("sid"<<1<<"playerid"<<100);
+        load.cb = [](bo &save){
+            player_t player;
+            player.load(save);
+        };
+        gdb.post(load);
+    };
+    gdb.post(store3);
+}
+
+void handle_equip(me, msg) {
+    player_t player;
+    
+    swap(player.conts[0].shelf[0], player.conts[1].shelf[2]);
+    
+    store_t store;
+    store.query = QUERY("sid"<<1<<"playerid"<<100);
+    store.update = BSON(
+        "$set"<<BSON(
+            "conts.1.shelf.3"<<BSON("proto"<<1<<"num"<<3)<<
+            "conts.3.shelf.1"<<BSON("proto"<<3<<"num"2)
+        )
+    );
+    store.cb = [](){
+    };
+
+    gdb.post(store);
 }
