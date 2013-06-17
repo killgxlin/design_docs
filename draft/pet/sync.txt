@@ -1,0 +1,67 @@
+player:
+{
+	 "_id" : 100010001
+	,"sid" : 1
+	,"playerid" : 1
+	,"bag" : [
+	     { "proto" : 1, "num" : 3 }
+		,{ "proto" : 2, "num" : 9 } 
+		,{ "proto" : 3, "num" : 1 }
+		,{ "proto" : 4, "num" : 1 }
+		,{ "proto" : 5, "num" : 1 } 
+		,{ "proto" : 6, "num" : 1 }
+		,{ "proto" : 7, "num" : 1 }
+		,{ "proto" : 8, "num" : 1 }
+		,{ "proto" : 9, "num" : 1 }
+		,{ "proto" : 10, "num" : 1 }
+		,{ "proto" : 11, "num" : 1 } 
+	] 
+	,"equip" : [  
+		 { "proto" : 1, "num" : 1 }
+		,{ "proto" : 2, "num" : 1 } 
+		,{ "proto" : 3, "num" : 1 }
+		,{ "proto" : 4, "num" : 1 }
+		,{ "proto" : 5, "num" : 1 } 
+		,{ "proto" : 6, "num" : 1 }
+	]
+    ,"att_d" : [
+    ]
+    ,"att_f" : [
+    ]
+    ,"att_n32" : [
+    ]
+    ,"att_u32" : [
+    ]
+    ,"att_n64" : [
+    ]
+    ,"att_u64" : [
+    ]
+    ,"att_str" : [
+    ]
+}
+
+rank:
+{
+     "_id" : 200010001
+    ,"sid" : 1
+    ,"1v1" : {
+        "rank" : []
+    }
+    ,"nvn" : {
+        "rank" : []
+    }
+}
+
+guild:
+{
+     "_id" : 300010001
+    ,"sid" : 1
+    ,"guildid" : 1
+    ,"member" : [
+         {playerid : 100010001, pos : 1}
+        ,{playerid : 100010002, pos : 2}
+        ,{playerid : 100010003, pos : 3}
+        ,{playerid : 100010004, pos : 4}
+        ,{playerid : 100010005, pos : 5}
+    ]
+}

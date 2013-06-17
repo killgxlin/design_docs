@@ -1,3 +1,7 @@
+竞技场
+背包装备栏
+
+
 struct db_t {
     list<op_t*>* cur_pack;
     list<list<op_t*>*> queued_packs;
@@ -135,3 +139,82 @@ void handle_equip(me, msg) {
 
     gdb.post(store);
 }
+
+
+{
+	"_id" : 3,
+	"sid" : 1,
+	"playerid" : 1,
+	"bag" : [
+		{ "proto" : 1, "num" : 3 },
+		{ "proto" : 2, "num" : 9 }, 
+		{ "proto" : 3, "num" : 1 },
+		{ "proto" : 4, "num" : 1 },
+		{ "proto" : 5, "num" : 1 }, 
+		{ "proto" : 6, "num" : 1 },
+		{ "proto" : 7, "num" : 1 },
+		{ "proto" : 8, "num" : 1 },
+		{ "proto" : 9, "num" : 1 },
+		{ "proto" : 10, "num" : 1 },
+		{ "proto" : 11, "num" : 1 } 
+	], 
+	"equip" : [  
+		{ "proto" : 1 }, 
+		{ "proto" : 2 },
+		{ "proto" : 7 },
+		{ "proto" : 4 }, 
+		{ "proto" : 5 }, 
+		{ "proto" : 6 } 
+	]
+}
+
+db.player.update( 
+	{_id:3}, 
+	{ 
+		$set:{
+			'bag.6':{proto:7, num:1},
+			'equip.2':{proto:1}
+		}
+	} 
+)
+
+
+void equip() {
+    store_t store;
+    store.query = QUERY("sid"<<1<<"playerid"<<1);
+    store.update = BSON(
+        "$pull"<<BSON(
+            "bag"<<BSON(
+                
+            )
+        )<<
+        "$push"<<BSON(
+            
+        )
+    );
+}
+
+{
+    "sid":1,
+    "rank_1v1":[
+        12,
+        3,
+        6,
+        4,
+        2,
+        1,
+        9,
+        10
+    ]
+}
+
+
+db.rank.update( 
+	{_id:3}, 
+	{ 
+		$set:{
+            'rank_1v1.0':9,
+            "rank_1v1.6":12
+		}
+	} 
+)
