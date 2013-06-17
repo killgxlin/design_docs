@@ -26,6 +26,7 @@ set shiftwidth=4
 set sidescroll=10
 set softtabstop=4
 set tabstop=4
+set window=51
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -61,7 +62,7 @@ badd +3 draft\pet\used_lib.txt
 badd +55 draft\pet\session.txt
 badd +20 draft\pet\client_session.txt
 badd +10 draft\pet\db.txt
-badd +0 draft\pet\sync.txt
+badd +1 draft\pet\sync.txt
 args draft\pet\client_session.txt
 edit draft\pet\sync.txt
 set splitbelow splitright
@@ -73,8 +74,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 39 + 40) / 80)
-exe 'vert 2resize ' . ((&columns * 40 + 40) / 80)
+exe 'vert 1resize ' . ((&columns * 100 + 100) / 200)
+exe 'vert 2resize ' . ((&columns * 99 + 100) / 200)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -178,11 +179,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 11) / 23)
+let s:l = 30 - ((29 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+30
 normal! 0
 lcd E:\design_docs
 wincmd w
@@ -290,7 +291,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 32 - ((9 * winheight(0) + 11) / 23)
+let s:l = 32 - ((20 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -298,8 +299,8 @@ normal! zt
 normal! 017l
 lcd E:\design_docs
 wincmd w
-exe 'vert 1resize ' . ((&columns * 39 + 40) / 80)
-exe 'vert 2resize ' . ((&columns * 40 + 40) / 80)
+exe 'vert 1resize ' . ((&columns * 100 + 100) / 200)
+exe 'vert 2resize ' . ((&columns * 99 + 100) / 200)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
