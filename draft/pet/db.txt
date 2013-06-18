@@ -239,11 +239,13 @@ struct player_data_t {
     uint32 u32[40];
 };
 
-
 struct player_t {
-    sync_att<int32> n32;
-    sync_att<item> bag;
-    sync_att<item> equip;
+    array_att<int32> n32;
+    array_att<item> bag;
+    array_att<item> equip;
+    map_att<uint32, task> task_current;
+    bitmap_att<TASK_NUM> task_completed;
+    set_att<uint32> task_canceled;
 
     bool init(Json::Value &save_) {
         player_data_t* data = gsm.alloc(playerid);
@@ -286,3 +288,11 @@ void on_load(Json::Value &save_) {
     player_t player;
     player.init(save_);
 }
+
+任务
+    map
+    bitmap
+    set
+物品
+    vector
+
