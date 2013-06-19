@@ -1,18 +1,46 @@
+struct session_t {
+    socket_t socket;
+    bool closed;
 
-io_service svc;
+    list<msg_t> send_queue;
+    list<msg_t> recv_queue;
+};
 
-acceptor actp(svc);
-actp.bind(endpoint);
-actp.listen();
-socket sock(svc);
-actp.async_accept(sock,  [&svc, &sock](){
+struct session_mgr {
+    list<session_t> sessions;
+    list<socket_t> sockets;
+} gsm;
 
-    async_read(sock, read_at_least(4), [](){
+struct network {
+    
+} gn;
+
+int main() {
+    gn.init();
+
+    gn.start_accept("localhost", 999, [](socket_t* socket_){
+        gsm.add(socket_);
     });
+    
+    while (true) {
+        for(auto itr = gsm.sessions.begin(); itr != gsm.sessions.end(); ) {
+            auto cur_itr = itr++;
 
-});
-thread thr([](){
-    svc.run();
-});
+            msg_t msg = cur_itr->recv();
+            if (msg) {
+                cur_itr->send(msg);
 
+                if (rand() % 2) {
+                    cur_itr->set_need_kick();
+                }
+            }
+            if (cur_itr->need_kick()) {
+                cur_itr->kick();
+                gsm.sessions.erase(cur_itr);
+            }
 
+        }
+    }
+    
+    gn.destroy();
+}
