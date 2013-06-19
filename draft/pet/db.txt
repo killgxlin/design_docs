@@ -240,12 +240,13 @@ struct player_data_t {
 };
 
 struct player_t {
-    array_att<int32> n32;
-    array_att<item> bag;
-    array_att<item> equip;
-    map_att<uint32, task> task_current;
-    bitmap_att<TASK_NUM> task_completed;
+    array_att<int32, N32_Att> n32;
+    array_att<item, ITEM_Bag> bag;
+    array_att<item, ITEM_Equip> equip;
+    map_att<task, uint32> task_current;
+    bitmap_att<TASK_NUM, TASK_ID> task_completed;
     set_att<uint32> task_canceled;
+
 
     bool init(Json::Value &save_) {
         player_data_t* data = gsm.alloc(playerid);
@@ -253,7 +254,7 @@ struct player_t {
         n32.shared_memory(data->n32);
         bag.shared_memory(data->bag);
         equip.shared_memory(data->equip);
-        
+        task_completed.shared_memory(data->task_completed);
     }
     void save() {
         bob data;
@@ -261,6 +262,7 @@ struct player_t {
         n32.save(data);
         bag.save(data);
         equip.save(data);
+        task_completed.save(data);
 
         store_t store;
         store.query = ;
@@ -273,14 +275,17 @@ struct player_t {
         n32.sync(sync_att);
         bag.sync(sync_att);
         equip.sync(sync_att);
+        task_completed.sync(sync_att);
         
         send_msg(sync_att);
     }
     void charge(int32_t value_) {
-        att(N32_Level, 11);
+        n32.att(N32_Level, 11);
 
-        att(BAG_0, item);
-        att(BAG_1, null_item);
+        bag.att(BAG_0, item);
+        bag.att(BAG_1, null_item);
+        task_completed.att(11, true);
+        task_completed.att(12, false);
     }
 };
 
@@ -295,4 +300,5 @@ void on_load(Json::Value &save_) {
     set
 ÎïÆ·
     vector
+
 
