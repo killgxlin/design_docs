@@ -1,46 +1,73 @@
-struct session_t {
-    socket_t socket;
-    bool closed;
 
-    list<msg_t> send_queue;
-    list<msg_t> recv_queue;
+#include <stdint.h>
+#include <list>
+#include <vector>
+#include <map>
+#include <functional>
+
+#include <boost/smart_ptr.hpp>
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
+
+using namespace std;
+using namespace boost::asio;
+
+typedef vector<uint8_t> msg_t;
+typedef boost::shared_ptr<msg_t> pmsg_t;
+
+struct session_t {
+    int32_t status;    // 未验证，正常，待关闭，已关闭
+
+    ip::tcp::socket socket;
+    list<pmsg_t> recv_queue;
+    list<pmsg_t> send_queue;
 };
 
-struct session_mgr {
-    list<session_t> sessions;
-    list<socket_t> sockets;
-} gsm;
+typedef boost::shared_ptr<session_t> psession_t;
 
-struct network {
-    
+struct network_t {
+    boost::thread_group thread_group;
+    io_service io_service;
+
+    list<pair<psession_t, uint64_t>> to_authorize;
+    map<uint64_t, psession_t> authorized;
+    list<psession_t> to_destroy;
+
+    // destroy thread
+    // send thread
+    // work thread
+    // authorize thread
 } gn;
 
-int main() {
+struct client_handler_t {
+    uint64_t sessionid;
+};
+
+typedef boost::shared_ptr<client_handler_t> pclient_handler_t;
+
+struct client_handler_manager_t {
+    map<uint64_t, pclient_handler_t> handlers;
+} gchm;
+
+bool test_asio3() {
+
     gn.init();
 
-    gn.start_accept("localhost", 999, [](socket_t* socket_){
-        gsm.add(socket_);
+    auto acceptor = gn.start_acceptor("localhost", 999, [](uint64_t sessionid_)->bool{
+        gchm.handlers[sessionid_] = pclient_handler_t(new client_handler_t());
+        return true;
     });
-    
+
     while (true) {
-        for(auto itr = gsm.sessions.begin(); itr != gsm.sessions.end(); ) {
-            auto cur_itr = itr++;
 
-            msg_t msg = cur_itr->recv();
-            if (msg) {
-                cur_itr->send(msg);
-
-                if (rand() % 2) {
-                    cur_itr->set_need_kick();
-                }
-            }
-            if (cur_itr->need_kick()) {
-                cur_itr->kick();
-                gsm.sessions.erase(cur_itr);
-            }
-
-        }
+        
+        gn.start_send();
     }
-    
+
+    gn.stop_acceptor(acceptor);
+
     gn.destroy();
+
+    return true;
 }
+

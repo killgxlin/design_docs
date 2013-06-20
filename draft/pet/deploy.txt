@@ -8,18 +8,18 @@ world
 
 
 
-
-client connect login
-login verify account and update status
-login response worldlist to client
-client send select world to login
-login notify world
-world prepare for client
-client connect world
-world verify client
-world change account status
-login notify client
-client disconnect login
-client connect world
+login:
+    client connect login
+    login verify account and update status
+    login response worldlist to client
+    client send select world to login
+    login notify world
+    world prepare for client
+    client connect world
+    world verify client
+    world change account status
+    login notify client
+    client disconnect login
+    client connect world
 
 client logoff
