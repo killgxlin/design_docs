@@ -26,7 +26,7 @@ set shiftwidth=4
 set sidescroll=10
 set softtabstop=4
 set tabstop=4
-set window=63
+set window=51
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -54,7 +54,7 @@ badd +68 draft\kuafu_v2.txt
 badd +46 draft\kuafu_v3.txt
 badd +23 draft\pet.txt
 badd +15 draft\server_elements_v2.txt
-badd +12 draft\pet\deploy.txt
+badd +35 draft\pet\deploy.txt
 badd +18 draft\pet\milestone_server.txt
 badd +1 draft\pet\milestone.txt
 badd +18 draft\pet\engine.txt
@@ -64,8 +64,9 @@ badd +20 draft\pet\client_session.txt
 badd +121 draft\pet\db.txt
 badd +49 draft\pet\sync.txt
 badd +57 draft\pet\net.txt
+badd +0 draft\pet\test_net.txt
 args draft\pet\client_session.txt
-edit draft\pet\deploy.txt
+edit draft\pet\test_net.txt
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -75,8 +76,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 135 + 134) / 268)
-exe 'vert 2resize ' . ((&columns * 132 + 134) / 268)
+exe 'vert 1resize ' . ((&columns * 101 + 100) / 200)
+exe 'vert 2resize ' . ((&columns * 98 + 100) / 200)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -180,11 +181,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 12 - ((11 * winheight(0) + 31) / 62)
+let s:l = 55 - ((36 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-12
+55
 normal! 0
 lcd E:\design_docs
 wincmd w
@@ -292,7 +293,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 57 - ((45 * winheight(0) + 31) / 62)
+let s:l = 57 - ((44 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -300,8 +301,8 @@ normal! zt
 normal! 012l
 lcd E:\design_docs
 wincmd w
-exe 'vert 1resize ' . ((&columns * 135 + 134) / 268)
-exe 'vert 2resize ' . ((&columns * 132 + 134) / 268)
+exe 'vert 1resize ' . ((&columns * 101 + 100) / 200)
+exe 'vert 2resize ' . ((&columns * 98 + 100) / 200)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

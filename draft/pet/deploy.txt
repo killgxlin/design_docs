@@ -22,4 +22,16 @@ login:
     client disconnect login
     client connect world
 
+login:
+    client   name passwdcrc   -> login
+    client <- token worldlist    login
+    client                    -> login 
+    client <-                    login 
+    client                    -> login 
+    client <-                    login 
+    client                    -> login 
+    client <-                    login 
+    client                    -> login 
+    client <-                    login 
+
 client logoff
