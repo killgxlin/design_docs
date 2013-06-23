@@ -1,0 +1,67 @@
+// test_server ---------------------------------------------------------------------------
+extern authorize_manager gam;
+extern server gs;
+extern client_handler_manager gchm;
+
+void test_server() {
+    gs.init();
+
+    auto acceptor = gs.start_acceptor(
+        "127.0.0.1", 999, 
+        [](const CSLogin &login_){
+            gam.need_auth(login_.uid(), login_.token(), [](uint64_t uid_, bool ok_){
+                gs.auth_result(uid_, ok_);
+            });
+        }, 
+        [](uint64_t uid_){
+            gchm.add_new(uid_);
+        }
+    );
+
+    gchm.init();
+    
+    while (true) {
+        gchm.all_recv();
+        gchm.all_send();
+        
+        gs.active_send();
+        sleep(100);
+    }
+
+    gchm.destroy();
+    
+    gs.stop_acceptor(acceptor);
+
+    gs.destroy();
+}
+
+// test_client ---------------------------------------------------------------------------
+
+void test_client() {
+
+    thread_group grp;
+    for (int i=0; i<100; ++i) {
+        grp.add([](){
+            client_t cli;
+            cli.init("127.0.0.1", 999);
+            while (!cli.is_connected()) {
+                cli.try_connect();
+            }
+            
+            msg_t msg;
+            cli.send(msg);
+            while (cli.is_connected()) {
+                msg_t msg = cli.recv();
+                if (msg) {
+                }
+                msg_t msg_send;
+                cli.send(msg_send);
+                
+                sleep(100);
+            }
+            cli.destroy();
+        });
+    }
+
+    grp.all_join();
+}
