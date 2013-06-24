@@ -1,0 +1,55 @@
+struct client_t {
+    io_service service_;
+    socket socket_;
+    strand strand_;
+
+    queue<pmsg_t> send_queue;
+    queue<pmsg_t> recv_queue;
+
+    bool sending;
+    void send(pmsg_t msg_) {
+        send_queue.push(msg_);
+        if (!sending) {
+            sending = true;
+            strand_.post(bind(_do_send, this));
+        }
+    }
+    bool recving;
+    pmsg_t recv() {
+        pmsg_t recved;
+        if (!recv_queue.pop(recved)) {
+            recving = true;
+            strand_.post(bind(_do_recv, this));
+        }
+        return recved;
+    }
+
+    list<pmsg_t> pending;
+    void _do_send() {
+        pmsg_t to_send;
+        vector<buffer> sended;
+        while (send_queue.pop(to_send)) {
+            pending.push_back(to_send);
+            sended.push_back(buffer(to_send.get()));
+        }
+
+        async_write(socket_, sended, strand_.wrap(_handle_send, this));
+    }
+    void _handle_send() {
+        pending.clear();
+        _do_send();
+    }
+    pmsg_t to_recv;
+    void _do_recv() {
+        async_read(socket_, to_recv, strand_.wrap(_handle_recv, this));
+    }
+    void _handle_recv();
+};
+
+struct network_t {
+    io_service service_;
+
+    vector<pclient_t> client;
+    void active_send();
+};
+
