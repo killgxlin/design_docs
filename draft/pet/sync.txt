@@ -24,6 +24,8 @@ player:
 		,{ "proto" : 5, "num" : 1 } 
 		,{ "proto" : 6, "num" : 1 }
 	]
+    ,"pet" : [
+    ]
     ,"att_d" : [
     ]
     ,"att_f" : [

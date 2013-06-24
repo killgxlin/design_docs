@@ -1,0 +1,130 @@
+struct client_t {
+    void init(const char* ip_, uint16_t port_);
+    void destroy();
+
+    void try_connect();
+    void is_connected();
+    void disconnect();
+    void send(msg_t msg_);
+    msg_t recv();
+    void free_recv();
+    msg_t get_send();
+};
+
+void thread_client() {
+    client_t cli;
+    cli.init("127.0.0.1", 999);
+
+    do {
+        cli.try_connect();
+        sleep(10);
+    } while (!cli.is_connected());
+
+    msg_t first;
+    cli.send(first);
+    
+    while (cli.is_connected()) {
+        msg_t recved = cli.recv();
+        if (recved) {
+            cli.free_recv(recved);
+        }
+
+        msg_t sended = cli.get_send();
+        cli.send(sended);
+        if (rand()%4 == 1)
+            cli.disconnect();
+    }
+
+    cli.destroy();
+}
+
+void test_client() {
+    thread_group thrg;
+    for (int i=0; i<10; ++i)
+        thrg.add_thread(thread_client);
+
+    thrg.all_join();
+}
+
+// --------------------------------------------------------------------------------------------
+struct auth_manager {
+    struct auth_t {
+        uint32_t cid;
+        msg_t first;
+        function<void(uint64_t, bool)> callback;
+    };
+    queue<pair<> to_authorize;
+
+    void add_check(auth_t* auth_);
+} gam;
+
+struct server_t {
+    queue<pair<uint32_t, bool>> authorized;
+    void authorized(uint32 cid_, bool ok_);
+
+    void thread_sender();
+    void thread_worker();
+    void thread_cleaner();
+    void thread_authorizer();
+
+    void init();
+    void destroy();
+
+    void active_send();
+    void stop_accept(uint32_t acceptor_);
+    uint32_t start_accept(const char* ip_, uint16_t port_, 
+        function<future<bool>(const msg_t &)> auth_, 
+        function<void(uint64_t)> success_cb_,
+        function<void(uint64_t)> close_cb_);
+    
+    void free_recv();
+    msg_t get_send();
+    void send(uint64_t uid_, msg_t msg_);
+    msg_t recv(uint64_t uid_);
+    bool is_disconnected(uint64_t uid_);
+    void kick(uint64_t uid_);
+    int32_t get_pending_num(uint64_t uid_);
+} gs;
+
+struct handler_t {
+    uint64_t uid;
+
+    void kick();
+};
+
+struct handler_manager {
+    queue<uint64_t> to_added;
+    map<uint64_t, handler_t*> handlers;
+
+    void add_handler(uint64_t uid_);
+} ghm;
+
+void test_server() {
+    server_t gs.
+    gs.init(5000);
+    uint32_t acceptor = gs.start_accept(
+        "127.0.0.1", 999, 
+        [](uint32_t cid_, const msg_t &first_){
+            auth_t* auth = new auth_t;
+            auth->cid = cid_;
+            auth->first = first_;
+            auth->callback = [](uint32_t cid_, bool ok_){
+                gs.authorized(cid_, ok_);
+            };
+            gam.add_check(auth);
+        },
+        [](uint32_t cid_){
+            ghm.need_add_handler(cid_);
+        },
+        [](uint32_t cid_){
+            ghm.need_del_handler(cid_);
+        }
+    );
+    while (true) {
+        gchm.all_recv();
+        gchm.all_send();
+        gs.active_send();
+    }
+    gs.stop_accept(acceptor);
+    gs.destroy();
+}
