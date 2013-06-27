@@ -1,73 +1,43 @@
+struct client_t {
+    tcp::socket socket;
+    bool destroying;
+    bool valid;
 
-#include <stdint.h>
-#include <list>
-#include <vector>
-#include <map>
-#include <functional>
+    // worker
+    // socket
+    start_recv();
 
-#include <boost/smart_ptr.hpp>
-#include <boost/asio.hpp>
-#include <boost/thread.hpp>
+    // worker
+    // start_recv
+    handle_recv();
 
-using namespace std;
-using namespace boost::asio;
+    // sender
+    // socket
+    start_send();
 
-typedef vector<uint8_t> msg_t;
-typedef boost::shared_ptr<msg_t> pmsg_t;
-
-struct session_t {
-    int32_t status;    // 未验证，正常，待关闭，已关闭
-
-    ip::tcp::socket socket;
-    list<pmsg_t> recv_queue;
-    list<pmsg_t> send_queue;
+    // worker
+    handle_send();
 };
-
-typedef boost::shared_ptr<session_t> psession_t;
 
 struct network_t {
-    boost::thread_group thread_group;
-    io_service io_service;
+    queue destroy_queue;
+    stack free_stack;
+    vector all_vector;
 
-    list<pair<psession_t, uint64_t>> to_authorize;
-    map<uint64_t, psession_t> authorized;
-    list<psession_t> to_destroy;
+    thread_group worker; // destroy_queue, free_stack
+    thread destroyer; // destroy_queue, free_stack
+    thread sender; // all_vector, destroy_queue
+    thread_group others; // destroy_queue
 
-    // destroy thread
-    // send thread
-    // work thread
-    // authorize thread
-} gn;
+    // worker, destroyer, others
+    // free_stack
+    start_accept(); 
 
-struct client_handler_t {
-    uint64_t sessionid;
+    // worker
+    // 
+    handle_accept(); 
+
+    // worker, others
+    // destroy_queue
+    disconnect();
 };
-
-typedef boost::shared_ptr<client_handler_t> pclient_handler_t;
-
-struct client_handler_manager_t {
-    map<uint64_t, pclient_handler_t> handlers;
-} gchm;
-
-bool test_asio3() {
-
-    gn.init();
-
-    auto acceptor = gn.start_acceptor("localhost", 999, [](uint64_t sessionid_)->bool{
-        gchm.handlers[sessionid_] = pclient_handler_t(new client_handler_t());
-        return true;
-    });
-
-    while (true) {
-
-        
-        gn.start_send();
-    }
-
-    gn.stop_acceptor(acceptor);
-
-    gn.destroy();
-
-    return true;
-}
-
