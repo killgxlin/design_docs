@@ -1,43 +1,74 @@
 struct client_t {
+    asio::io_service &service;
+    asio::io_service::strand &strand;
+    pacceptor_t acceptor;
     tcp::socket socket;
-    bool destroying;
-    bool valid;
+
+    // atomic
+    bool in_use;
+    bool recving;
+    bool sending;
+    bool disconnecting;
+    bool auth_resulting;
 
     // worker
-    // socket
-    start_recv();
+    void do_recv();
+    void handle_recv();
 
     // worker
-    // start_recv
-    handle_recv();
-
-    // sender
-    // socket
-    start_send();
+    void do_send();
+    void handle_send();
 
     // worker
-    handle_send();
+    void do_disconnect();
+
+    // worker
+    void do_auth_result();
+
+    // main
+    void recv();
+    void send();
+    void disconnect();
+    void auth_result();
+};
+
+struct acceptor_t {
+    tcp::acceptor acceptor;
+
+    // atomic
+    bool accepting;
+
+    // worker
+    void do_accept(); 
+    void handle_accept(); 
+
+    // main
+    void accept();
 };
 
 struct network_t {
-    queue destroy_queue;
     stack free_stack;
     vector all_vector;
 
-    thread_group worker; // destroy_queue, free_stack
-    thread destroyer; // destroy_queue, free_stack
-    thread sender; // all_vector, destroy_queue
-    thread_group others; // destroy_queue
+    thread_group worker;
+    thread sender;
 
-    // worker, destroyer, others
-    // free_stack
-    start_accept(); 
+    // main
+    void active_send();
 
-    // worker
-    // 
-    handle_accept(); 
+    // main
+    void stop_acceptor(uint32_t);
+    uint32_t start_acceptor(
+        const string &ip_, 
+        const uint16_t port_, 
+        callback auth_,
+        callback logon_,
+        callback logoff_
+    );
 
-    // worker, others
-    // destroy_queue
-    disconnect();
+    // main
+    void auth_result(pclient_t, bool);
+    void disconnect(pclient_t);
+    pmsg_t recv(pclient_t);
+    bool send(pclient_t, pmsg_t);
 };
