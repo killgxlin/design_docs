@@ -1,304 +1,60 @@
 竞技场
 背包装备栏
 
+db
 
-struct db_t {
-    list<op_t*>* cur_pack;
-    list<list<op_t*>*> queued_packs;
-    list<list<op_t*>*> operated_packs;
-
-    list<op_t*> queued_ops;
-    list<op_t*> operated_ops;
-
-    bool execute(op_t*);
-    void post_trans(op_t*);
-    void post(op_t*);
-
-    static void thread_trans();
-    static void thread_ops();
-
-    connection_t sync_conn;
-    connection_t ops_conn;
-    connection_t pack_conn;
-} gdb;
-
-struct ranklist_t {
-    uint64 players[100];
-} grl;
-
-struct item_t {
-    uint32 protoid;
-    int32 num;
-};
-
-struct container_t {
-    item_t shelf[10];
-};
-
-struct player_t {
-    uint64 tochallenge[5];
-    bool challenged[5];
-    uint64 playerid;
-    container_t conts[3];
-
-    void save(bob &save_) {
-        save_.append("playerid", playerid);
-
-        for (int i=0; i<5; ++i)
-            bab.appendArray("tochallenge", tochallenge[i]);
-
-        BSONArrayBuilder b;
-        for (int i=0; i<5; ++i)
-            b.append(challenged[i]);
-        bab.append("challenged", b.arr());
-
-        for (int i=0; i<3; ++i) {
-            BSONArrayBuilder b;
-            for (int j=0; j<10; ++j) {
-                bo item = BSON(
-                    "proto"<<conts[i].shelf[j].protoid<<
-                    "num"<<conts[i].shelf[j].num
-                );
-                b.append(item);
-            }
-            bab.appendArray("container", b.arr());
-        }
-    }
-};
-
-void handle_pk(me, msg) {
-    int he = me.tochallenge[msg.index];
-
-    int my_index = grl.getIndex(me);
-    int his_index = grl.getIndex(he);
-    
-    swap(grl.players[my_index], grl.players[his_index]);
-    me.challenged[msg.index] = true;
-
-    store_t store;
-    store.collection = "rank_list";
-    store.query = QUERY("sid"<<1);
-    store.update = BSON(
-        "$set"<<BSON(
-            v_name("players.%d", 1)<<100<<
-            v_name("players.%d", 3)<<1
-        )
-    );
-    gdb.post_trans(store);
-    
-    store_t store2;
-    store2.collection = "player";
-    store2.query = QUERY("sid"<<1<<"playerid"<<100);
-    store2.update = BSON("$set"<<BSON(v_name("challenged.%d", 1)<<"true"));
-    gdb.post_trans(store2);
-
-    load_t load;
-    load.collection = "player";
-    load.query = QUERY("sid"<<1);
-    load.cb = [](){
-    };
-    gdb.execute(load);
-}
-
-void handle_create(me, msg) {
-    player_t player;
-    bob save;
-    player.save(save);
-
-    store_t store3;
-    store3.query = QUERY("sid"<<1<<"playerid"<<100);
-    store3.update = save.obj();
-    store3.cb = [](){
-        load_t load;
-        load.collection = "player";
-        load.query = QUERY("sid"<<1<<"playerid"<<100);
-        load.cb = [](bo &save){
-            player_t player;
-            player.load(save);
-        };
-        gdb.post(load);
-    };
-    gdb.post(store3);
-}
-
-void handle_equip(me, msg) {
-    player_t player;
-    
-    swap(player.conts[0].shelf[0], player.conts[1].shelf[2]);
-    
-    store_t store;
-    store.query = QUERY("sid"<<1<<"playerid"<<100);
-    store.update = BSON(
-        "$set"<<BSON(
-            "conts.1.shelf.3"<<BSON("proto"<<1<<"num"<<3)<<
-            "conts.3.shelf.1"<<BSON("proto"<<3<<"num"2)
-        )
-    );
-    store.cb = [](){
-    };
-
-    gdb.post(store);
-}
-
-
-{
-	"_id" : 3,
-	"sid" : 1,
-	"playerid" : 1,
-	"bag" : [
-		{ "proto" : 1, "num" : 3 },
-		{ "proto" : 2, "num" : 9 }, 
-		{ "proto" : 3, "num" : 1 },
-		{ "proto" : 4, "num" : 1 },
-		{ "proto" : 5, "num" : 1 }, 
-		{ "proto" : 6, "num" : 1 },
-		{ "proto" : 7, "num" : 1 },
-		{ "proto" : 8, "num" : 1 },
-		{ "proto" : 9, "num" : 1 },
-		{ "proto" : 10, "num" : 1 },
-		{ "proto" : 11, "num" : 1 } 
-	], 
-	"equip" : [  
-		{ "proto" : 1 }, 
-		{ "proto" : 2 },
-		{ "proto" : 7 },
-		{ "proto" : 4 }, 
-		{ "proto" : 5 }, 
-		{ "proto" : 6 } 
-	]
-}
-
-db.player.update( 
-	{_id:3}, 
-	{ 
-		$set:{
-			'bag.6':{proto:7, num:1},
-			'equip.2':{proto:1}
-		}
-	} 
-)
-
-
-void equip() {
-    store_t store;
-    store.query = QUERY("sid"<<1<<"playerid"<<1);
-    store.update = BSON(
-        "$pull"<<BSON(
-            "bag"<<BSON(
-                
-            )
-        )<<
-        "$push"<<BSON(
-            
-        )
-    );
-}
-
-{
-    "sid":1,
-    "rank_1v1":[
-        12,
-        3,
-        6,
-        4,
-        2,
-        1,
-        9,
-        10
-    ]
-}
-
-
-db.rank.update( 
-	{_id:3}, 
-	{ 
-		$set:{
-            'rank_1v1.0':9,
-            "rank_1v1.6":12
-		}
-	} 
-)
-
-struct shared_memory_t {
-} gsm;
-
-struct item_t {
-    uint32 protoid;
-    int32 num;
-};
-
-struct player_data_t {
-    uint64 _id;
-    int32 sid;
-    uint32 playerid;
-    item_t bag[40];
-    item_t equip[6];
-    double d[40];
-    float f[40];
-    int32 n32[40];
-    uint32 u32[40];
-};
-
-struct player_t {
-    array_att<int32, N32_Att> n32;
-    array_att<item, ITEM_Bag> bag;
-    array_att<item, ITEM_Equip> equip;
-    map_att<task, uint32> task_current;
-    bitmap_att<TASK_NUM, TASK_ID> task_completed;
-    set_att<uint32> task_canceled;
-
-
-    bool init(Json::Value &save_) {
-        player_data_t* data = gsm.alloc(playerid);
-
-        n32.shared_memory(data->n32);
-        bag.shared_memory(data->bag);
-        equip.shared_memory(data->equip);
-        task_completed.shared_memory(data->task_completed);
-    }
-    void save() {
-        bob data;
-
-        n32.save(data);
-        bag.save(data);
-        equip.save(data);
-        task_completed.save(data);
-
-        store_t store;
-        store.query = ;
-        store.update = data.obj();
-        dbm.post_trans(store);
-    }
-    void sync() {
-        SCSyncAtt sync_att;
-
-        n32.sync(sync_att);
-        bag.sync(sync_att);
-        equip.sync(sync_att);
-        task_completed.sync(sync_att);
         
-        send_msg(sync_att);
-    }
-    void charge(int32_t value_) {
-        n32.att(N32_Level, 11);
+player_list;
+db.init("127.0.0.1", "killerg", "123456");
 
-        bag.att(BAG_0, item);
-        bag.att(BAG_1, null_item);
-        task_completed.att(11, true);
-        task_completed.att(12, false);
+while (true) {
+    {
+        // 创建帐号，创建角色，保存邮件
+        Player player;
+        Save save;
+        save.condition = player.key();
+        save.content = player.save();
+        save.callback = [](){
+        };
+        db.post(save);
     }
-};
+    {
+        // 读取玩家，读取邮件
+        Load load;
+        load.condition = key();
+        load.callback = [](){
+        };
+        db.post(load);
+    }
+    {
+        // 初始化，读取所有帮派
+        Load load;
+        load.condition = "sid:1234";
+        load.callback = [](){
+        };
+        db.execute(load);
+    }
 
-void on_load(Json::Value &save_) {
-    player_t player;
-    player.init(save_);
+    for everyobject {
+        Updata update;
+        update.condition = object->key();
+        update.content = object->sync();
+        db.t_post(update);
+    }
+    
+    db.t_commit();
 }
 
-任务
-    map
-    bitmap
-    set
-物品
-    vector
+db.destroy();
 
+sync_array<N32PlayerAttIndex, int32> n32("n32");
+sync_array<U32PlayerAttIndex, uint32> u32("u32");
+sync_array<N64PlayerAttIndex, int64> n64("n64");
+sync_array<U64PlayerAttIndex, uint64> u64("u64");
+sync_array<FPlayerAttIndex, float> f("f");
+sync_array<DPlayerAttIndex, double> d("d");
+sync_array<BPlayerAttIndex, bool> b("b");
+
+sync_array<PlayerBagIndex, item_t> bag("bag");
+sync_array<PlayerEquipIndex, item_t> equip("equip");
 
