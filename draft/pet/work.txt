@@ -12,6 +12,25 @@
         tick_transaction 多线程优化
 
 逻辑
-    各种系统
+    object模型
+        player
+        pet
+        sprite
+        item
+        equip
+        
+    战斗
+    整体框架
+
+    ClientHandlerManager
+    PlayerManager
+    ClanManager
+    FriendManager
+    RankManager
+    ArenaManager
+    MailManager
+    SceneManager
+
+    
 
 

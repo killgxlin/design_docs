@@ -16,7 +16,8 @@ void thread_client() {
     cli.init("127.0.0.1", 999);
 
     do {
-        cli.try_connect();
+        if (!cli.is_connected())
+            cli.try_connect();
         sleep(10);
     } while (!cli.is_connected());
 

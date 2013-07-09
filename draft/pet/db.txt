@@ -55,6 +55,5 @@ sync_array<FPlayerAttIndex, float> f("f");
 sync_array<DPlayerAttIndex, double> d("d");
 sync_array<BPlayerAttIndex, bool> b("b");
 
-sync_array<PlayerBagIndex, item_t> bag("bag");
-sync_array<PlayerEquipIndex, item_t> equip("equip");
+±³°ü
 

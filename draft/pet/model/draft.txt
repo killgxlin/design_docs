@@ -1,0 +1,65 @@
+struct sprite_t {
+    int32 quality; // 品质
+    string name; // 名字
+    int32 star; // 星级
+    int32 combat_power; // 战力
+    int32 sprite_power; // 灵气值
+    uint32 skill[2]; // 技能
+    int32 stars[15]; // 各个位置星星的数量
+};
+
+struct pet_t {
+    int32 exp; //经验
+    string name; // 名字
+    int32 character; // 性格
+    int32 class; // 系别
+    int32 combat_power; // 战力
+    int32 quality; // 品质
+
+    int32 level; // 等级
+    int32 star; // 星级
+    int32 pos; // 出战位置
+
+    int32 hp; // 生命
+    int32 attack; // 攻击
+    int32 defend; // 防御
+    int32 speed; // 速度
+
+    uint32 skill[5]; // 技能
+    uint32 magic_brand[10]; // 魔法印记
+
+};
+
+struct equip_t {
+    bitset class; // 系别
+    int32 enhance_level; // 强化等级
+    int32 star[4]; // 星
+
+    int32 hp_mod;
+    int32 speed_mod;
+    int32 attack_mod;
+    int32 defend_mod;
+
+    // 强化属性
+
+};
+
+struct player_t {
+    string name; // 名字
+    int32 vip; // vip等级
+    uint32 avatar; // 外观
+    int32 badge; // 徽章
+    uint32 clanid; // 家族id
+    int32 combat_power; // 战力
+    uint32 encountered_pet[100]; // 图鉴
+
+    int32 rmb; // 充值获得
+    int32 coin; // 战斗获得
+    int32 sprite_power; // 灵气值
+
+    int32 combat_pet[3]; // 出战
+    int32 append_pet[3]; // 备战栏
+    pet_t pet; // 所有
+
+    equip_t equip[6]; // 装备栏
+};
