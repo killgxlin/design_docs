@@ -1,0 +1,49 @@
+client_t
+    sending
+    recving
+    closing
+
+    void start() {
+        sending = false;
+        closing = false;
+
+        recving = true;
+        start_recv();
+    }
+
+    void handle_recv(err_) {
+        if (err_) {
+            closing = true;
+            return;
+        }
+        start_recv();
+    }
+
+    void handle_send(err_) {
+        if (err_) {
+            closing = true;
+        }
+    }
+    
+acceptor_t
+    accepting
+
+server_t
+
+关闭
+    server
+        角色：读取尽可能多的msg，处理发送结果
+        主动关：
+            不再读
+            写剩余的消息，直到写完
+        被动关：
+            无法读，处理剩余的消息
+            写剩余的消息，直到写完
+
+        recv_num = 0;
+            read 关闭了
+
+        send_num = 0;
+            write 关闭了
+
+    client

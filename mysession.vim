@@ -61,7 +61,7 @@ badd +18 draft\pet\engine.txt
 badd +3 draft\pet\used_lib.txt
 badd +49 draft\pet\session.txt
 badd +1 draft\pet\client_session.txt
-badd +35 draft\pet\db.txt
+badd +59 draft\pet\db.txt
 badd +49 draft\pet\sync.txt
 badd +57 draft\pet\net.txt
 badd +1 draft\pet\test_net.txt
@@ -69,7 +69,8 @@ badd +1 draft\guild\guild_design.txt
 badd +37 draft\guild\guild_total.txt
 badd +40 draft\pet\model\draft.txt
 badd +16 draft\pet\combat\skill.txt
-badd +0 draft\pet\net_test.txt
+badd +1 draft\pet\net_test.txt
+badd +0 draft\pet\net\design.txt
 args draft\pet\client_session.txt
 edit draft\pet\net_test.txt
 set splitbelow splitright
@@ -81,8 +82,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 135 + 134) / 268)
-exe 'vert 2resize ' . ((&columns * 132 + 134) / 268)
+exe 'vert 1resize ' . ((&columns * 133 + 134) / 268)
+exe 'vert 2resize ' . ((&columns * 134 + 134) / 268)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -195,7 +196,7 @@ normal! 0
 lcd D:\design_docs
 wincmd w
 argglobal
-edit D:\design_docs\draft\pet\db.txt
+edit D:\design_docs\draft\pet\net\design.txt
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -298,16 +299,17 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 59 - ((58 * winheight(0) + 31) / 62)
+let s:l = 40 - ((39 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-59
-normal! 0
+40
+normal! 09l
+lcd D:\design_docs
 wincmd w
 2wincmd w
-exe 'vert 1resize ' . ((&columns * 135 + 134) / 268)
-exe 'vert 2resize ' . ((&columns * 132 + 134) / 268)
+exe 'vert 1resize ' . ((&columns * 133 + 134) / 268)
+exe 'vert 2resize ' . ((&columns * 134 + 134) / 268)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
