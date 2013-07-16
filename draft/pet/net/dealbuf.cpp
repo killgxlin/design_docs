@@ -1,3 +1,4 @@
+#include "dealsocket.h"
 #include "mydata.h"
 
 void mydata_t::close() {
@@ -51,7 +52,6 @@ void mydata_t::deal_write() {
 		return;
 	    } else if (need == 0) {
 		sending.reset();
-		printf("msg sended\n");
 		deal_write();
 		return;
 	    } else {
@@ -120,7 +120,6 @@ void mydata_t::deal_read() {
 		    close();
 		    return;
 		}
-		printf("msg recved\n");
 		recving.reset();
 		deal_read();
 	    } else {

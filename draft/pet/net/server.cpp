@@ -1,46 +1,5 @@
+#include "dealsocket.h"
 #include "mydata.h"
-
-void set_nodelay(int socket_) {
-    int opt = 1;
-    if (setsockopt(socket_, IPPROTO_TCP, TCP_NODELAY, (char*)&opt, sizeof(opt)) < 0) {
-	perror("set_tcpnodelay");
-	exit(-1);
-    }
-
-}
-
-void set_linger(int socket_, int linger_) {
-    linger opt;
-    opt.l_onoff = linger_>0 ? 1 : 0;
-    opt.l_linger = linger_>0 ? linger_ : 0; 
-    if (setsockopt(socket_, SOL_SOCKET, SO_LINGER, (char*)&opt, sizeof(opt)) < 0) {
-	perror("set_linger");
-	exit(-1);
-    }
-}
-
-void set_reuseaddr(int socket_) {
-    int opt = 1;
-    if (setsockopt(socket_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
-	perror("set_reuseaddr");
-	exit(-1);
-    }
-}
-
-void set_nonblock(int socket_) {
-    int opts;
-    opts = fcntl(socket_, F_GETFL);
-    if (opts < 0) {
-	perror("fcntl, F_GETFL");
-	exit(-1);
-    }
-
-    opts |= O_NONBLOCK;
-    if (fcntl(socket_, F_SETFL, opts) < 0) {
-	perror("fcntl, F_SETFL");
-	exit(-1);
-    }
-}
 
 mydata_t* deal_event(int epfd_, int ctrl_, int fd_, uint32_t events_, mydata_t* md_) {
     epoll_event event;
@@ -117,6 +76,7 @@ bool network_t::start_accept(
 void network_t::update() {
     int num = epoll_wait(epfd, events, max_conn, -1);
 	
+    #pragma omp parallel for
     for (int i=0; i<num; ++i) {
         epoll_event* ev = events+i;
         mydata_t* md = (mydata_t*)ev->data.ptr;
@@ -128,7 +88,7 @@ void network_t::update() {
 	    int newfd = accept(acceptor, (sockaddr*)&client_addr, &sinsize);
 	    while (newfd >= 0) {
 		set_nonblock(newfd);
-		set_linger(newfd);
+		set_linger(newfd, 0);
 		set_nodelay(newfd);
 		auto md = deal_event(epfd, EPOLL_CTL_ADD, newfd, EPOLLIN|EPOLLET, new mydata_t);
 		
@@ -178,6 +138,10 @@ int main() {
 	[](mydata_t* login_){
 	    conns.insert(login_);
 	    printf("conns %d\n", conns.size());
+	    pmsg_t msg = std::make_shared<msg_t>(14);
+	    for (int i=0; i<14; ++i) {
+		*(msg->data()+i) = '0' + i;
+	    }
 	}, 
 	[](mydata_t* logout_){
 	    conns.erase(logout_);

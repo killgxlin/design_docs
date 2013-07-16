@@ -1,22 +1,9 @@
 #ifndef MYDATA_H
 #define MYDATA_H
 
-#include <sys/epoll.h>
-#include <sys/unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <strings.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <vector>
-#include <memory>
 #include <list>
-#include <functional>
-#include <stdint.h>
-#include <errno.h>
+#include <memory>
+#include <vector>
 #include <boost/atomic.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
 
@@ -67,10 +54,6 @@ struct mydata_t {
 };
 
 extern mydata_t* deal_event(int epfd_, int ctrl_, int fd_, uint32_t events_, mydata_t* md_);
-extern void set_nodelay(int socket_); 
-extern void set_linger(int socket_, int linger_ = 0);
-extern void set_reuseaddr(int socket_); 
-extern void set_nonblock(int socket_); 
  
 typedef std::function<void(mydata_t*)> handler_t;
 struct network_t {
